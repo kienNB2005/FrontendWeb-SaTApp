@@ -1,0 +1,212 @@
+/* =========================
+   Homeroom Report
+   ========================= */
+
+.hr-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-bottom: 18px;
+}
+
+.hr-class-select {
+  width: 160px;
+}
+
+.hr-semester-select {
+  width: 180px;
+}
+
+.hr-subject-select {
+  width: 220px;
+}
+
+.hr-limit-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hr-limit-box label,
+.hr-limit-box span {
+  color: var(--tx3);
+  font-size: 14px;
+}
+
+.hr-limit-box label {
+  font-weight: 500;
+}
+
+.hr-limit-input {
+  width: 70px;
+  text-align: center;
+}
+
+.hr-export-actions {
+  display: flex;
+  gap: 8px;
+
+  margin-left: auto;
+}
+
+/* =========================
+   States
+   ========================= */
+
+.hr-state {
+  padding: 40px;
+
+  text-align: center;
+  color: var(--tx3);
+
+  font-size: 14px;
+}
+
+/* =========================
+   Report card
+   ========================= */
+
+.hr-card-title {
+  padding: 16px;
+  border-bottom: 1px solid var(--bd);
+
+  font-weight: 600;
+}
+
+.print-header {
+  display: none;
+}
+
+.hr-print-info {
+  display: flex;
+  justify-content: space-between;
+
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+
+  font-size: 13px;
+}
+
+.hr-print-info div div {
+  margin-bottom: 6px;
+}
+
+.hr-print-info-right {
+  text-align: right;
+}
+
+/* =========================
+   Table
+   ========================= */
+
+.hr-col-index {
+  width: 40px;
+}
+
+.hr-text-center {
+  text-align: center;
+}
+
+.hr-text-right {
+  text-align: right;
+}
+
+.hr-student-code {
+  font-family: var(--mo);
+}
+
+.hr-danger-row {
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.hr-rate {
+  font-family: var(--mo);
+  font-weight: 700;
+}
+
+.hr-rate-good {
+  color: var(--gr);
+}
+
+.hr-rate-warning {
+  color: var(--am);
+}
+
+.hr-rate-danger {
+  color: var(--rd);
+}
+
+.hr-empty-row {
+  padding: 20px;
+  text-align: center;
+}
+
+/* =========================
+   Print
+   ========================= */
+
+@media print {
+  @page {
+    margin: 15mm;
+    size: auto;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: white;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #homeroom-report-page,
+  #homeroom-report-page * {
+    visibility: visible;
+  }
+
+  #homeroom-report-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .hide-on-print {
+    display: none !important;
+  }
+
+  .sg {
+    display: none !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .print-header {
+    display: block !important;
+    margin-bottom: 20px;
+  }
+
+  .print-header h2 {
+    margin-bottom: 16px;
+
+    text-align: center;
+    text-transform: uppercase;
+
+    font-size: 20px;
+  }
+
+  .tbl th {
+    background-color: var(--bg3) !important;
+  }
+}

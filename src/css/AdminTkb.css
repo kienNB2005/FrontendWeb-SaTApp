@@ -1,0 +1,601 @@
+/* =========================
+   AdminTkb
+   ========================= */
+
+.atk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.atk-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.atk-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.atk-semester-select {
+  width: 200px;
+  background: var(--bg2);
+  padding: 8px 12px;
+}
+
+.atk-btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* =========================
+   State cards
+   ========================= */
+
+.atk-center-state {
+  padding: 60px;
+  text-align: center;
+}
+
+.atk-center-state p {
+  color: var(--tx3);
+  font-size: 14px;
+}
+
+.atk-state-icon {
+  margin-bottom: 12px;
+}
+
+.atk-state-icon-lg {
+  margin-bottom: 16px;
+}
+
+.atk-message-card {
+  padding: 60px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.atk-message-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.atk-message-card p {
+  color: var(--tx3);
+}
+
+.atk-message-btn {
+  margin-top: 20px;
+}
+
+.atk-empty-semester-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.atk-warning-box {
+  padding: 20px;
+  margin-bottom: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border-radius: 12px;
+  border: 1px solid var(--bd);
+  background: var(--bg3);
+}
+
+.atk-warning-box span {
+  color: var(--am);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.atk-init-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 12px 24px;
+  font-size: 15px;
+}
+
+.atk-guide-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+  text-align: center;
+
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+}
+
+.atk-guide-icon-large {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--bd);
+
+  background: linear-gradient(135deg, var(--blL), var(--puL));
+}
+
+.atk-guide-card h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.atk-guide-card p {
+  max-width: 300px;
+
+  color: var(--tx3);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================
+   List
+   ========================= */
+
+.atk-filter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.atk-day-select {
+  width: 100px;
+  border: none;
+  background: transparent;
+  outline: none;
+
+  color: var(--tx);
+  font-size: 13px;
+}
+
+.atk-list-state {
+  padding: 60px;
+  text-align: center;
+}
+
+.atk-list-state p {
+  color: var(--tx3);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.atk-list-error {
+  padding: 40px;
+}
+
+.atk-list-error p {
+  color: var(--rd);
+}
+
+.atk-empty-icon {
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* =========================
+   Table
+   ========================= */
+
+.atk-table-wrap {
+  overflow-x: auto;
+}
+
+.atk-main-text {
+  font-weight: 500;
+}
+
+.atk-sub-text {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.atk-room-badge {
+  display: inline-block;
+
+  padding: 4px 8px;
+  border-radius: 6px;
+
+  background: var(--bg3);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.atk-day-text {
+  color: var(--bl);
+  font-weight: 500;
+}
+
+.atk-period-text {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.atk-center-cell {
+  text-align: center;
+}
+
+.atk-session-count {
+  color: var(--gr);
+  font-weight: 600;
+}
+
+.atk-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px;
+  border-top: 1px solid var(--bd);
+
+  font-size: 12px;
+}
+
+.atk-pagination span {
+  color: var(--tx3);
+}
+
+.atk-pagination-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.atk-page-active {
+  background: var(--bg3);
+  color: var(--tx);
+  border: 1px solid var(--bl);
+}
+
+/* =========================
+   Upload
+   ========================= */
+
+.atk-upload-card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.atk-upload-body {
+  padding: 30px;
+}
+
+.atk-hidden-input {
+  display: none;
+}
+
+.atk-upload-zone {
+  padding: 50px 30px;
+}
+
+.atk-upload-icon {
+  margin-bottom: 16px;
+}
+
+.atk-upload-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.atk-upload-desc {
+  color: var(--tx3);
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.atk-upload-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  border-radius: 20px;
+
+  background: var(--bg3);
+  color: var(--tx3);
+
+  font-size: 11px;
+}
+
+/* =========================
+   Progress
+   ========================= */
+
+.atk-progress-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.atk-progress-icon {
+  width: 80px;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 24px;
+  border-radius: 50%;
+}
+
+.atk-progress-icon-blue {
+  border: 1px solid var(--bl);
+  background: var(--blL);
+}
+
+.atk-progress-icon-purple {
+  border: 1px solid var(--pu);
+  background: var(--puL);
+}
+
+.atk-progress-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.atk-progress-card p {
+  height: 20px;
+  margin-bottom: 30px;
+
+  color: var(--tx3);
+  font-size: 13px;
+}
+
+.atk-progress-track {
+  width: 100%;
+  height: 8px;
+
+  overflow: hidden;
+  border-radius: 4px;
+
+  background: var(--bg3);
+}
+
+.atk-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease-out;
+}
+
+.atk-progress-fill-blue {
+  background: linear-gradient(90deg, var(--bl2), var(--bl));
+}
+
+.atk-progress-fill-purple {
+  background: linear-gradient(90deg, var(--pu), #d946ef);
+}
+
+.atk-progress-percent {
+  margin-top: 12px;
+
+  color: var(--tx3);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   Preview
+   ========================= */
+
+.atk-preview-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.atk-preview-table-wrap {
+  max-height: 500px;
+  overflow-x: auto;
+}
+
+.atk-preview-thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  background: var(--bg);
+}
+
+.atk-col-row {
+  width: 40px;
+}
+
+.atk-col-status {
+  width: 250px;
+}
+
+.atk-preview-error-row {
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.atk-muted-cell {
+  color: var(--tx3);
+}
+
+.atk-preview-cell-error {
+  color: var(--rd);
+  font-weight: 500;
+}
+
+.atk-preview-missing {
+  color: var(--rd);
+  font-size: 11px;
+}
+
+.atk-preview-estimated {
+  font-weight: 600;
+}
+
+.atk-preview-errors {
+  color: var(--rd);
+  font-size: 12px;
+}
+
+.atk-preview-errors div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 4px;
+}
+
+.atk-preview-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 12px 16px;
+  border-top: 1px solid var(--bd);
+
+  background: var(--bg3);
+  color: var(--tx3);
+
+  font-size: 12px;
+}
+
+/* =========================
+   Success
+   ========================= */
+
+.atk-success-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 50px 30px;
+  text-align: center;
+}
+
+.atk-success-icon {
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.1),
+    rgba(34, 197, 94, 0.05)
+  );
+
+  box-shadow: 0 0 40px rgba(34, 197, 94, 0.1);
+}
+
+.atk-success-card h2 {
+  color: var(--tx);
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.atk-success-card p {
+  margin-bottom: 30px;
+
+  color: var(--tx3);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.atk-success-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 20px;
+  margin-bottom: 40px;
+
+  text-align: left;
+  border-radius: 12px;
+  border: 1px solid var(--bd);
+
+  background: var(--bg3);
+}
+
+.atk-success-info span {
+  font-size: 13px;
+}
+
+.atk-success-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.atk-success-actions .btn {
+  padding: 10px 20px;
+  font-size: 13px;
+}
+
+/* =========================
+   Text helpers
+   ========================= */
+
+.atk-text-red {
+  color: var(--rd) !important;
+}
+
+.atk-text-green {
+  color: var(--gr) !important;
+}
+
+/* =========================
+   Responsive Tweaks
+   ========================= */
+@media (max-width: 768px) {
+  .atk-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .atk-header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .atk-semester-select {
+    width: 100%;
+  }
+
+  .card-h {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .atk-filter-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .atk-filter-actions .srch,
+  .atk-day-select {
+    width: 100%;
+  }
+
+  .atk-filter-actions .srch input {
+    width: 100%;
+  }
+}

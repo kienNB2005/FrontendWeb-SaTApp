@@ -1,0 +1,315 @@
+/* =========================
+   AdminSemesters
+   ========================= */
+
+.asm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.asm-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.asm-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.asm-btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.asm-inline-flex {
+  display: inline-flex;
+}
+
+/* =========================
+   List states
+   ========================= */
+
+.asm-list-state {
+  padding: 60px;
+  text-align: center;
+}
+
+.asm-list-state p {
+  color: var(--tx3);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.asm-list-error {
+  padding: 40px;
+}
+
+.asm-list-error p {
+  color: var(--rd);
+}
+
+.asm-state-icon {
+  margin-bottom: 12px;
+}
+
+.asm-empty-icon {
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* =========================
+   Table
+   ========================= */
+
+.asm-table-wrap {
+  overflow-x: auto;
+}
+
+.asm-col-index {
+  width: 50px;
+}
+
+.asm-col-date {
+  width: 130px;
+}
+
+.asm-col-status {
+  width: 130px;
+}
+
+.asm-col-actions {
+  width: 100px;
+  text-align: center;
+}
+
+.asm-index-cell {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.asm-name-cell {
+  font-weight: 500;
+}
+
+.asm-date-cell {
+  color: var(--tx3);
+  font-size: 13px;
+}
+
+.asm-date-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.asm-date-icon {
+  opacity: 0.65;
+}
+
+.asm-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.asm-created-cell {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.asm-action-cell {
+  text-align: center;
+}
+
+.asm-row-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.asm-icon-btn {
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.asm-delete-btn {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.asm-table-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--bd);
+
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+/* =========================
+   Modal / Form
+   ========================= */
+
+.asm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.asm-modal {
+  width: 100%;
+  max-width: 400px;
+
+  margin: 20px;
+  padding: 24px;
+}
+
+.asm-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.asm-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.asm-close-btn {
+  padding: 4px;
+  border: none;
+}
+
+.asm-form-group {
+  margin-bottom: 16px;
+}
+
+.asm-form-group-large {
+  margin-bottom: 24px;
+}
+
+.asm-form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--tx3);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.asm-input {
+  width: 100%;
+  padding: 10px 14px;
+
+  border-radius: 8px;
+  border: 1px solid var(--bd);
+
+  color: var(--tx);
+  background: var(--bg2);
+}
+
+.asm-input-primary {
+  border-color: var(--bl);
+}
+
+.asm-readonly-dates {
+  display: flex;
+  gap: 14px;
+
+  margin-bottom: 20px;
+}
+
+.asm-readonly-date-group {
+  flex: 1;
+}
+
+.asm-readonly-date-group label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--tx3);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.asm-readonly-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px dashed var(--bd2);
+
+  background: var(--bg);
+  color: var(--tx3);
+
+  font-size: 13px;
+}
+
+.asm-active-box {
+  margin-bottom: 24px;
+}
+
+.asm-active-box label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+}
+
+.asm-active-box input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--bl);
+}
+
+.asm-active-box span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.asm-active-box p {
+  margin-top: 6px;
+  margin-left: 24px;
+
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.asm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* =========================
+   DatePicker
+   ========================= */
+
+.asm-modal .dp-wrapper {
+  position: relative;
+}
+
+.asm-modal .react-datepicker-wrapper {
+  width: 100%;
+}
+
+.asm-modal .fi {
+  width: 100%;
+}

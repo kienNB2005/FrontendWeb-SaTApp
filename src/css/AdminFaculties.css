@@ -1,0 +1,547 @@
+/* =========================
+   AdminFaculties
+   ========================= */
+
+.afc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.afc-page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+}
+
+.afc-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.afc-btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.afc-inline-flex {
+  display: inline-flex;
+}
+
+/* =========================
+   List states
+   ========================= */
+
+.afc-list-state {
+  padding: 60px;
+  text-align: center;
+}
+
+.afc-list-state p {
+  color: var(--tx3);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.afc-list-error {
+  padding: 40px;
+}
+
+.afc-list-error p {
+  color: var(--rd);
+}
+
+.afc-state-icon {
+  margin-bottom: 12px;
+}
+
+.afc-empty-icon {
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+/* =========================
+   Table
+   ========================= */
+
+.afc-table-wrap {
+  overflow-x: auto;
+}
+
+.afc-col-index {
+  width: 50px;
+}
+
+.afc-col-code {
+  width: 120px;
+}
+
+.afc-col-date {
+  width: 150px;
+}
+
+.afc-col-actions {
+  width: 100px;
+  text-align: center;
+}
+
+.afc-th-icon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.afc-index-cell {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.afc-code-badge {
+  display: inline-block;
+
+  padding: 3px 10px;
+  border-radius: 6px;
+
+  color: var(--bl);
+  background: var(--blL);
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.afc-name-cell {
+  font-weight: 500;
+}
+
+.afc-date-cell {
+  color: var(--tx3);
+  font-size: 12px;
+}
+
+.afc-action-cell {
+  text-align: center;
+}
+
+.afc-row-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.afc-icon-btn {
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.afc-delete-btn {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.afc-table-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--bd);
+
+  font-size: 12px;
+  color: var(--tx3);
+}
+
+/* =========================
+   Upload
+   ========================= */
+
+.afc-upload-wrap {
+  padding: 30px;
+}
+
+.afc-hidden-input {
+  display: none;
+}
+
+.afc-upload-zone {
+  padding: 50px 30px;
+  cursor: pointer;
+}
+
+.afc-upload-icon {
+  margin-bottom: 16px;
+}
+
+.afc-upload-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.afc-upload-desc {
+  font-size: 13px;
+  color: var(--tx3);
+  margin-bottom: 24px;
+}
+
+.afc-upload-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  border-radius: 20px;
+
+  background: var(--bg3);
+  color: var(--tx3);
+
+  font-size: 11px;
+}
+
+.afc-template-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 30px;
+  text-align: center;
+
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+}
+
+.afc-template-icon {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--bd);
+
+  background: linear-gradient(135deg, var(--blL), var(--puL));
+}
+
+.afc-template-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.afc-template-desc {
+  max-width: 300px;
+
+  color: var(--tx3);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================
+   Import processing
+   ========================= */
+
+.afc-import-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.afc-import-circle {
+  width: 80px;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  border: 1px solid var(--bl);
+
+  background: var(--blL);
+}
+
+.afc-import-title {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.afc-import-status {
+  min-height: 20px;
+  margin-bottom: 30px;
+
+  color: var(--tx3);
+  font-size: 13px;
+}
+
+.afc-progress {
+  height: 8px;
+  overflow: hidden;
+
+  border-radius: 4px;
+  background: var(--bg3);
+}
+
+.afc-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease-out;
+
+  background: linear-gradient(90deg, var(--bl2), var(--bl));
+}
+
+.afc-progress-text {
+  margin-top: 12px;
+
+  color: var(--tx3);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   Import result
+   ========================= */
+
+.afc-success-card {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.afc-result-icon {
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 24px;
+  border-radius: 50%;
+}
+
+.afc-result-icon-success {
+  border: 1px solid var(--gr);
+  background: var(--grL);
+}
+
+.afc-result-icon-warning {
+  border: 1px solid var(--am);
+  background: var(--amL);
+}
+
+.afc-result-title {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.afc-result-desc {
+  margin-bottom: 30px;
+
+  color: var(--tx3);
+  font-size: 14px;
+}
+
+.afc-result-box {
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  background: var(--bg3);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.afc-result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bd);
+}
+
+.afc-result-row span {
+  color: var(--tx3);
+}
+
+.afc-result-row strong {
+  font-weight: 600;
+}
+
+.afc-result-row.no-border {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.afc-error-detail {
+  padding: 20px;
+  margin-bottom: 24px;
+
+  text-align: left;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.afc-error-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 10px;
+
+  color: var(--rd);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.afc-error-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--tx);
+  font-size: 13px;
+  line-height: 1.8;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.afc-center-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.afc-error-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  text-align: center;
+}
+
+.afc-error-circle {
+  width: 80px;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  border: 1px solid var(--rd);
+
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.afc-error-title {
+  color: var(--rd);
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.afc-error-text {
+  margin-bottom: 30px;
+
+  color: var(--tx);
+  font-size: 14px;
+}
+
+/* =========================
+   Modal / Form
+   ========================= */
+
+.afc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.afc-modal {
+  width: 100%;
+  max-width: 400px;
+
+  margin: 20px;
+  padding: 24px;
+}
+
+.afc-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.afc-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.afc-close-btn {
+  padding: 4px;
+  border: none;
+}
+
+.afc-form-group {
+  margin-bottom: 16px;
+}
+
+.afc-form-group-large {
+  margin-bottom: 24px;
+}
+
+.afc-form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--tx3);
+  font-size: 13px;
+}
+
+.afc-input {
+  width: 100%;
+  padding: 10px 14px;
+
+  border-radius: 8px;
+  border: 1px solid var(--bd);
+
+  color: var(--tx);
+}
+
+.afc-input-primary {
+  border-color: var(--bl);
+}
+
+.afc-input-muted {
+  background: var(--bg3);
+  color: var(--tx);
+}
+
+input.afc-input-muted[readonly] {
+  color: var(--tx3);
+}
+
+.afc-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* =========================
+   Text helpers
+   ========================= */
+
+.afc-text-red {
+  color: var(--rd) !important;
+}
