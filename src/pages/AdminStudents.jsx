@@ -394,7 +394,7 @@ export default function AdminStudents() {
   };
 
   const renderHeader = () => (
-    <div className="ast-header">
+    <div className="ast-header" style={{ flexWrap: 'wrap', gap: '15px' }}>
       <div>
         <div className="tb-title ast-page-title">
           <Users size={24} color="var(--bl)" />
@@ -408,7 +408,7 @@ export default function AdminStudents() {
         </div>
       </div>
 
-      <div className="ast-header-actions">
+      <div className="ast-header-actions" style={{ flexWrap: 'wrap' }}>
         {view === 'list' ? (
           <>
             <button
@@ -652,7 +652,7 @@ export default function AdminStudents() {
 
       <div className="ast-preview-table-wrap">
         <div className="ast-preview-table-scroll">
-          <table className="tbl">
+          <table className="tbl ast-responsive-table">
             <thead className="ast-preview-thead">
               <tr>
                 <th className="ast-col-row">Dòng</th>
@@ -896,9 +896,9 @@ export default function AdminStudents() {
           <tbody>
             {students.map((student, idx) => (
               <tr key={student.id}>
-                <td className="ast-index-cell">{page * size + idx + 1}</td>
+                <td className="ast-index-cell" data-label="#">{page * size + idx + 1}</td>
 
-                <td className="ast-code-cell">{student.studentCode}</td>
+                <td className="ast-code-cell" data-label="Mã SV">{student.studentCode}</td>
 
                 <td>
                   <div className="ast-user-cell">
@@ -912,11 +912,11 @@ export default function AdminStudents() {
                   </div>
                 </td>
 
-                <td className="ast-email-cell">{student.email}</td>
+                <td className="ast-email-cell" data-label="Email">{student.email}</td>
 
-                <td className="ast-muted-cell">{student.phoneNumber || '—'}</td>
+                <td className="ast-muted-cell" data-label="SĐT">{student.phoneNumber || '—'}</td>
 
-                <td className="ast-small-cell">{getGenderLabel(student.gender)}</td>
+                <td className="ast-small-cell" data-label="Giới tính">{getGenderLabel(student.gender)}</td>
 
                 <td>
                   <div className="ast-class-code">{student.adminClassCode || '—'}</div>

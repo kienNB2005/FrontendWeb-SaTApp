@@ -405,7 +405,7 @@ export default function AdminLecturers() {
   };
 
   const renderHeader = () => (
-    <div className="alc-header">
+    <div className="alc-header" style={{ flexWrap: 'wrap', gap: '15px' }}>
       <div>
         <div className="tb-title alc-page-title">
           <Users size={24} color="var(--bl)" />
@@ -419,7 +419,7 @@ export default function AdminLecturers() {
         </div>
       </div>
 
-      <div className="alc-header-actions">
+      <div className="alc-header-actions" style={{ flexWrap: 'wrap' }}>
         {view === 'list' ? (
           <>
             <button
@@ -663,7 +663,7 @@ export default function AdminLecturers() {
 
       <div className="alc-preview-table-wrap">
         <div className="alc-preview-table-scroll">
-          <table className="tbl">
+          <table className="tbl alc-responsive-table">
             <thead className="alc-preview-thead">
               <tr>
                 <th className="alc-col-row">Dòng</th>
@@ -907,9 +907,9 @@ export default function AdminLecturers() {
           <tbody>
             {lecturers.map((lecturer, idx) => (
               <tr key={lecturer.id}>
-                <td className="alc-index-cell">{page * size + idx + 1}</td>
+                <td className="alc-index-cell" data-label="#">{page * size + idx + 1}</td>
 
-                <td className="alc-code-cell">{lecturer.lecturerCode}</td>
+                <td className="alc-code-cell" data-label="Mã GV">{lecturer.lecturerCode}</td>
 
                 <td>
                   <div className="alc-user-cell">
@@ -923,11 +923,11 @@ export default function AdminLecturers() {
                   </div>
                 </td>
 
-                <td className="alc-email-cell">{lecturer.email}</td>
+                <td className="alc-email-cell" data-label="Email">{lecturer.email}</td>
 
-                <td className="alc-muted-cell">{lecturer.phoneNumber || '—'}</td>
+                <td className="alc-muted-cell" data-label="SĐT">{lecturer.phoneNumber || '—'}</td>
 
-                <td className="alc-small-cell">{getGenderLabel(lecturer.gender)}</td>
+                <td className="alc-small-cell" data-label="Giới tính">{getGenderLabel(lecturer.gender)}</td>
 
                 <td>
                   <div className="alc-faculty-code">{lecturer.facultyCode || '—'}</div>
@@ -942,7 +942,7 @@ export default function AdminLecturers() {
                   )}
                 </td>
 
-                <td className="alc-action-cell">
+                <td className="alc-action-cell" data-label="">
                   <button
                     className="btn btn-s btn-sm"
                     onClick={() => handleEditClick(lecturer)}
