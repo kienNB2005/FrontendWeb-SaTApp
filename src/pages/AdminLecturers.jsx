@@ -889,7 +889,7 @@ export default function AdminLecturers() {
   const renderLecturerTable = () => (
     <>
       <div className="alc-table-wrap">
-        <table className="tbl">
+        <table className="tbl alc-responsive-table">
           <thead>
             <tr>
               <th className="alc-col-index">#</th>

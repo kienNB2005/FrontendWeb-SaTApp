@@ -878,7 +878,7 @@ export default function AdminStudents() {
   const renderStudentTable = () => (
     <>
       <div className="ast-table-wrap">
-        <table className="tbl">
+        <table className="tbl ast-responsive-table">
           <thead>
             <tr>
               <th className="ast-col-index">#</th>
