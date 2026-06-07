@@ -1,8 +1,11 @@
+import { useError } from '../contexts/ErrorContext';
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { Loader2 } from 'lucide-react';
 
 export default function Tkb() {
+  const { showError } = useError();
+
   const [viewMode, setViewMode] = useState('week'); // 'today' | 'week'
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [currentWeek, setCurrentWeek] = useState(1);
@@ -98,6 +101,7 @@ export default function Tkb() {
         
       } catch (err) {
         console.error("Lỗi khởi tạo TKB:", err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       } finally {
         setLoading(false);
       }
@@ -133,6 +137,7 @@ export default function Tkb() {
         }
       } catch (err) {
         console.error("Lỗi khi tải lịch:", err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       } finally {
         setLoading(false);
       }

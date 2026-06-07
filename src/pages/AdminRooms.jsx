@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -88,6 +89,8 @@ function LocationMarker({
 }
 
 export default function AdminRooms() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
@@ -175,7 +178,7 @@ export default function AdminRooms() {
 
   const handleSaveEdit = async () => {
     if (!editBuilding.trim() || !editCapacity) {
-      toast.error('Vui lòng nhập Tòa nhà và Sức chứa!');
+      showError('Vui lòng nhập Tòa nhà và Sức chứa!');
       return;
     }
 
@@ -196,7 +199,7 @@ export default function AdminRooms() {
       setEditingRoom(null);
       fetchRooms();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cập nhật thất bại');
+      showError(err.response?.data?.message || 'Cập nhật thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -213,7 +216,7 @@ export default function AdminRooms() {
       await api.delete(`/api/v1/rooms/${room.id}`);
       fetchRooms();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại');
+      showError(err.response?.data?.message || 'Xóa thất bại');
     } finally {
       setIsDeleting(null);
     }
@@ -231,7 +234,7 @@ export default function AdminRooms() {
 
   const handleSaveAdd = async () => {
     if (!addCode.trim() || !addBuilding.trim() || !addCapacity) {
-      toast.error('Vui lòng nhập Mã phòng, Tòa nhà và Sức chứa!');
+      showError('Vui lòng nhập Mã phòng, Tòa nhà và Sức chứa!');
       return;
     }
 
@@ -252,7 +255,7 @@ export default function AdminRooms() {
       setIsAdding(false);
       fetchRooms();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Thêm mới thất bại');
+      showError(err.response?.data?.message || 'Thêm mới thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -291,10 +294,10 @@ export default function AdminRooms() {
           setEditLongitude(parseFloat(result.lon));
         }
       } else {
-        toast.error('Không tìm thấy địa điểm nào với từ khóa này.');
+        showError('Không tìm thấy địa điểm nào với từ khóa này.');
       }
     } catch {
-      toast.error('Lỗi khi tìm kiếm địa điểm.');
+      showError('Lỗi khi tìm kiếm địa điểm.');
     } finally {
       setIsSearchingMap(false);
     }
@@ -302,7 +305,7 @@ export default function AdminRooms() {
 
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
-      toast.error(
+      showError(
         'Trình duyệt của bạn không hỗ trợ định vị GPS hoặc đang truy cập qua HTTP (cần HTTPS hoặc localhost).'
       );
       return;
@@ -336,7 +339,8 @@ export default function AdminRooms() {
           (err2) => {
             setIsGettingLocation(false);
             console.error('Lỗi định vị low accuracy:', err2);
-            toast.error(
+      showError(err2?.response?.data?.message || err2?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+            showError(
               'Không thể lấy vị trí hiện tại. Vui lòng cấp quyền truy cập vị trí cho trang web hoặc bật Location/GPS trên máy.'
             );
           },
@@ -422,7 +426,7 @@ export default function AdminRooms() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 

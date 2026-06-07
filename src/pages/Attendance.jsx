@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -272,6 +273,8 @@ function StudentRow({ row, idx, pendingData, onUpdate, isSelected, onToggleSelec
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function Attendance() {
+  const { showError } = useError();
+
   const { sessionId } = useParams();
   const navigate = useNavigate();
 
@@ -469,7 +472,7 @@ export default function Attendance() {
       setPendingChanges({});
       toast.success('Lưu thành công!'); // Có thể thay bằng Toast UI nếu có
     } catch (err) {
-      toast.error("Lỗi khi lưu: " + friendlyError(err));
+      showError("Lỗi khi lưu: " + friendlyError(err));
     } finally {
       setIsSaving(false);
     }

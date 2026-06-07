@@ -1,0 +1,84 @@
+/* ── ERROR MODAL ── */
+.error-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.error-modal-content {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  animation: fadeUp 0.3s ease;
+}
+
+.error-modal-icon {
+  margin: 0 auto 20px auto;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 4px solid #f27474;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-modal-heading {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #545454;
+  margin-bottom: 12px;
+}
+
+.error-modal-message {
+  font-family: 'Mulish', sans-serif;
+  font-size: 15px;
+  color: #545454;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.error-modal-btn {
+  background-color: var(--blue-bright, #2979ff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 36px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.error-modal-btn:hover {
+  background-color: var(--blue-mid, #1a56a0);
+  transform: translateY(-1px);
+}
+
+.error-modal-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

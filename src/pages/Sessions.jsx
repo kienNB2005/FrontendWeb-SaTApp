@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import { useConfirm } from '../contexts/ConfirmContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -50,6 +51,8 @@ function AttendanceCell({ present, late, total }) {
 }
 
 export default function Sessions() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -179,7 +182,7 @@ export default function Sessions() {
       await loadSessions();
       navigate(`/qr?sessionId=${sessionId}`);
     } catch (err) {
-      toast.error(friendlyError(err));
+      showError(friendlyError(err));
     } finally {
       setActionLoading(null);
     }
@@ -193,14 +196,14 @@ export default function Sessions() {
       await api.patch(`/api/v1/sessions/${sessionId}/status`, { status: "CLOSED" });
       loadSessions();
     } catch (err) {
-      toast.error(friendlyError(err));
+      showError(friendlyError(err));
     } finally {
       setActionLoading(null);
     }
   }
 
   async function submitCancel() {
-    if (cancelReason.trim().length < 5) return toast.error("Lý do hủy buổi học quá ngắn.");
+    if (cancelReason.trim().length < 5) return showError("Lý do hủy buổi học quá ngắn.");
     try {
       await api.post(`/api/v1/session-requests/${cancelModalSessionId}/cancel`, { cancelReason: cancelReason });
       setCancelModalSessionId(null);
@@ -208,7 +211,7 @@ export default function Sessions() {
       toast.success("Đã gửi yêu cầu hủy buổi, vui lòng chờ Admin duyệt.");
       loadSessions();
     } catch (err) {
-      toast.error(friendlyError(err));
+      showError(friendlyError(err));
     }
   }
 
@@ -227,27 +230,27 @@ export default function Sessions() {
   // }, []);
 
   async function submitMakeup() {
-    if (!makeupForm.sessionDate) return toast.error("Vui lòng chọn ngày dạy bù.");
+    if (!makeupForm.sessionDate) return showError("Vui lòng chọn ngày dạy bù.");
     if (selectedSessionForMakeup) {
       const selectedDate = makeupForm.sessionDate;
       const originalDate = selectedSessionForMakeup.sessionDate;
       const endDate = selectedSessionForMakeup.semesterEndDate;
       
       if (selectedDate < originalDate) {
-        return toast.error("Ngày dạy bù phải từ ngày có buổi học gốc trở đi.");
+        return showError("Ngày dạy bù phải từ ngày có buổi học gốc trở đi.");
       }
       if (endDate && selectedDate >= endDate) {
-        return toast.error("Ngày dạy bù phải diễn ra trước ngày kết thúc học kỳ.");
+        return showError("Ngày dạy bù phải diễn ra trước ngày kết thúc học kỳ.");
       }
     }
-    if (!makeupForm.roomId) return toast.error("Vui lòng chọn phòng học trống.");
+    if (!makeupForm.roomId) return showError("Vui lòng chọn phòng học trống.");
     try {
       await api.post(`/api/v1/session-requests/${makeupModalSessionId}/makeup`, makeupForm);
       setMakeupModalSessionId(null);
       toast.success("Đã gửi yêu cầu tạo lịch dạy bù, vui lòng chờ Admin duyệt.");
       loadSessions();
     } catch (err) {
-      toast.error(friendlyError(err));
+      showError(friendlyError(err));
     }
   }
 
@@ -333,7 +336,7 @@ export default function Sessions() {
               }}
               onClick={() => {
                 if (hasOpen) {
-                  toast.error('Vui lòng kết thúc buổi học đang mở trước khi thao tác!');
+                  showError('Vui lòng kết thúc buổi học đang mở trước khi thao tác!');
                 } else {
                   handleOpen(sId);
                 }

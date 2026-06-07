@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -22,6 +23,8 @@ import api from '../utils/api';
 import '../css/AdminDepartments.css';
 
 export default function AdminDepartments() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
@@ -105,7 +108,7 @@ export default function AdminDepartments() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 
@@ -189,17 +192,18 @@ export default function AdminDepartments() {
       setFaculties(res.data.result || []);
     } catch (err) {
       console.error('Lỗi lấy danh sách khoa', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
   const handleSaveEdit = async () => {
     if (!editName.trim()) {
-      toast.error('Tên ngành không được để trống!');
+      showError('Tên ngành không được để trống!');
       return;
     }
 
     if (!editFacultyId) {
-      toast.error('Vui lòng chọn khoa trực thuộc!');
+      showError('Vui lòng chọn khoa trực thuộc!');
       return;
     }
 
@@ -214,7 +218,7 @@ export default function AdminDepartments() {
       setEditingDept(null);
       fetchDepartments();
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Cập nhật thất bại. Vui lòng thử lại.'
       );
@@ -234,7 +238,7 @@ export default function AdminDepartments() {
       await api.delete(`/api/v1/departments/${dept.id}`);
       fetchDepartments();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại. Vui lòng thử lại.');
+      showError(err.response?.data?.message || 'Xóa thất bại. Vui lòng thử lại.');
     } finally {
       setIsDeleting(null);
     }
@@ -251,17 +255,18 @@ export default function AdminDepartments() {
       setFaculties(res.data.result || []);
     } catch (err) {
       console.error('Lỗi lấy danh sách khoa', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
   const handleSaveAdd = async () => {
     if (!addCode.trim() || !addName.trim()) {
-      toast.error('Mã ngành và tên ngành không được để trống!');
+      showError('Mã ngành và tên ngành không được để trống!');
       return;
     }
 
     if (!addFacultyId) {
-      toast.error('Vui lòng chọn khoa trực thuộc!');
+      showError('Vui lòng chọn khoa trực thuộc!');
       return;
     }
 
@@ -277,7 +282,7 @@ export default function AdminDepartments() {
       setIsAdding(false);
       fetchDepartments();
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Thêm mới thất bại. Vui lòng thử lại.'
       );

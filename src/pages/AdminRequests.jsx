@@ -1,9 +1,12 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
 import api from '../utils/api';
 
 export default function AdminRequests() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   const [activeTab, setActiveTab] = useState('cancel'); // 'cancel' or 'makeup'
   const [cancels, setCancels] = useState([]);
@@ -43,12 +46,12 @@ export default function AdminRequests() {
       toast.success('Đã phê duyệt thành công.');
       loadData();
     } catch (err) {
-      toast.error(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
+      showError(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
     }
   };
 
   const submitReject = async () => {
-    if (rejectReason.trim().length < 5) return toast.error("Lý do từ chối quá ngắn.");
+    if (rejectReason.trim().length < 5) return showError("Lý do từ chối quá ngắn.");
     try {
       await api.post(`/api/v1/session-requests/admin/${rejectModalId}/reject?type=${activeTab}`, {
         rejectReason: rejectReason
@@ -58,7 +61,7 @@ export default function AdminRequests() {
       setRejectReason("");
       loadData();
     } catch (err) {
-      toast.error(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
+      showError(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
     }
   };
 

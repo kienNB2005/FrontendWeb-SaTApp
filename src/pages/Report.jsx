@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 
+import { useError } from '../contexts/ErrorContext';
 export default function Report() {
+  const { showError } = useError();
+
   const [semesters, setSemesters] = useState([]);
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -56,6 +59,7 @@ export default function Report() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
@@ -72,6 +76,7 @@ export default function Report() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
@@ -88,6 +93,7 @@ export default function Report() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
@@ -107,6 +113,7 @@ export default function Report() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     } finally {
       setLoading(false);
     }
@@ -132,7 +139,8 @@ export default function Report() {
       link.parentNode.removeChild(link);
     } catch (error) {
       console.error("Lỗi xuất excel", error);
-      toast.error("Không thể xuất file Excel.");
+      showError(error?.response?.data?.message || error?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+      showError("Không thể xuất file Excel.");
     }
   };
 

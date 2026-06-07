@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -21,6 +22,8 @@ import api from '../utils/api';
 import '../css/AdminFaculties.css';
 
 export default function AdminFaculties() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
@@ -101,7 +104,7 @@ export default function AdminFaculties() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 
@@ -182,7 +185,7 @@ export default function AdminFaculties() {
 
   const handleSaveEdit = async () => {
     if (!editName.trim()) {
-      toast.error('Tên khoa không được để trống!');
+      showError('Tên khoa không được để trống!');
       return;
     }
 
@@ -196,7 +199,7 @@ export default function AdminFaculties() {
       setEditingFaculty(null);
       fetchFaculties();
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Cập nhật thất bại. Vui lòng thử lại.'
       );
@@ -216,7 +219,7 @@ export default function AdminFaculties() {
       await api.delete(`/api/v1/faculties/${faculty.id}`);
       fetchFaculties();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại. Vui lòng thử lại.');
+      showError(err.response?.data?.message || 'Xóa thất bại. Vui lòng thử lại.');
     } finally {
       setIsDeleting(null);
     }
@@ -224,7 +227,7 @@ export default function AdminFaculties() {
 
   const handleAdd = async () => {
     if (!addCode.trim() || !addName.trim()) {
-      toast.error('Mã khoa và tên khoa không được để trống!');
+      showError('Mã khoa và tên khoa không được để trống!');
       return;
     }
 
@@ -241,7 +244,7 @@ export default function AdminFaculties() {
       setAddName('');
       fetchFaculties();
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Thêm mới thất bại. Vui lòng thử lại.'
       );

@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -34,6 +35,8 @@ const DEFAULT_EDIT_DATA = {
 };
 
 export default function AdminSemesters() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   const [semesters, setSemesters] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -103,12 +106,12 @@ export default function AdminSemesters() {
 
   const handleCreate = async () => {
     if (!createData.name.trim() || !createData.startDate || !createData.endDate || !createData.startWeek) {
-      toast.error('Vui lòng nhập đầy đủ Tên, Ngày bắt đầu, Ngày kết thúc và Tuần bắt đầu!');
+      showError('Vui lòng nhập đầy đủ Tên, Ngày bắt đầu, Ngày kết thúc và Tuần bắt đầu!');
       return;
     }
 
     if (createData.startDate >= createData.endDate) {
-      toast.error('Ngày bắt đầu phải trước Ngày kết thúc!');
+      showError('Ngày bắt đầu phải trước Ngày kết thúc!');
       return;
     }
 
@@ -128,7 +131,7 @@ export default function AdminSemesters() {
       setCreateData(DEFAULT_CREATE_DATA);
       fetchSemesters();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Tạo học kỳ thất bại!');
+      showError(err.response?.data?.message || 'Tạo học kỳ thất bại!');
     } finally {
       setIsSaving(false);
     }
@@ -145,7 +148,7 @@ export default function AdminSemesters() {
 
   const handleSaveEdit = async () => {
     if (!editData.name.trim() || !editData.startWeek) {
-      toast.error('Tên học kỳ và Tuần bắt đầu không được để trống!');
+      showError('Tên học kỳ và Tuần bắt đầu không được để trống!');
       return;
     }
 
@@ -157,7 +160,7 @@ export default function AdminSemesters() {
       setEditingSemester(null);
       fetchSemesters();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cập nhật thất bại!');
+      showError(err.response?.data?.message || 'Cập nhật thất bại!');
     } finally {
       setIsSaving(false);
     }
@@ -174,7 +177,7 @@ export default function AdminSemesters() {
       await api.delete(`/api/v1/semesters/${semester.id}`);
       fetchSemesters();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại!');
+      showError(err.response?.data?.message || 'Xóa thất bại!');
     } finally {
       setIsDeleting(null);
     }

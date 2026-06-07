@@ -34,7 +34,7 @@ export default function Layout() {
   }, []);
 
   return (
-    <>
+    <div className="layout">
       <Sidebar role={role} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       {/* Mobile Sidebar Overlay */}
@@ -49,6 +49,6 @@ export default function Layout() {
           <Outlet context={{ role }} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

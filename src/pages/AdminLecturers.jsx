@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -43,6 +44,8 @@ const DEFAULT_EDIT_FORM = {
 };
 
 export default function AdminLecturers() {
+  const { showError } = useError();
+
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
 
@@ -95,6 +98,7 @@ export default function AdminLecturers() {
       setFaculties(facultyList);
     } catch (err) {
       console.error('Lỗi lấy danh sách khoa', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   }, []);
 
@@ -149,6 +153,7 @@ export default function AdminLecturers() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       setListError(
         err.response?.data?.message ||
           err.message ||
@@ -328,7 +333,7 @@ export default function AdminLecturers() {
       .map((item) => item.lecturer);
 
     if (validLecturers.length === 0) {
-      toast.error('Không có dòng dữ liệu hợp lệ nào để import!');
+      showError('Không có dòng dữ liệu hợp lệ nào để import!');
       return;
     }
 
@@ -367,7 +372,7 @@ export default function AdminLecturers() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 

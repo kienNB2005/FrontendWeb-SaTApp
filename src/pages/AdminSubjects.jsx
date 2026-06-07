@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -21,6 +22,8 @@ import api from '../utils/api';
 import '../css/AdminSubjects.css';
 
 export default function AdminSubjects() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
@@ -94,7 +97,7 @@ export default function AdminSubjects() {
 
   const handleSaveEdit = async () => {
     if (!editName.trim() || !editCredits) {
-      toast.error('Vui lòng nhập đầy đủ thông tin!');
+      showError('Vui lòng nhập đầy đủ thông tin!');
       return;
     }
 
@@ -109,7 +112,7 @@ export default function AdminSubjects() {
       setEditingSubject(null);
       fetchSubjects();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cập nhật thất bại');
+      showError(err.response?.data?.message || 'Cập nhật thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -130,7 +133,7 @@ export default function AdminSubjects() {
       await api.delete(`/api/v1/subjects/${subject.id}`);
       fetchSubjects();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại');
+      showError(err.response?.data?.message || 'Xóa thất bại');
     } finally {
       setIsDeleting(null);
     }
@@ -145,7 +148,7 @@ export default function AdminSubjects() {
 
   const handleSaveAdd = async () => {
     if (!addCode.trim() || !addName.trim() || !addCredits) {
-      toast.error('Vui lòng nhập đầy đủ thông tin!');
+      showError('Vui lòng nhập đầy đủ thông tin!');
       return;
     }
 
@@ -161,7 +164,7 @@ export default function AdminSubjects() {
       setIsAdding(false);
       fetchSubjects();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Thêm mới thất bại');
+      showError(err.response?.data?.message || 'Thêm mới thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -234,7 +237,7 @@ export default function AdminSubjects() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 

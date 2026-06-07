@@ -1,8 +1,11 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useMemo } from 'react';
 import api from '../utils/api';
 import '../css/AdminReport.css';
 
 export default function AdminReport() {
+  const { showError } = useError();
+
   const [semesters, setSemesters] = useState([]);
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -41,6 +44,7 @@ export default function AdminReport() {
         setDepartments(depRes.data?.result || depRes.data || []);
       } catch (err) {
         console.error('Failed to fetch filters', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       }
     };
     fetchFilters();
@@ -67,6 +71,7 @@ export default function AdminReport() {
         setReportData(res.data?.result || res.data || { summary: {}, rows: [] });
       } catch (err) {
         console.error('Failed to fetch report data', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       } finally {
         setLoading(false);
       }

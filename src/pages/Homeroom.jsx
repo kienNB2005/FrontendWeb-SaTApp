@@ -1,8 +1,11 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import '../css/Homeroom.css';
 export default function Homeroom() {
+  const { showError } = useError();
+
   const [classes, setClasses] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -27,6 +30,7 @@ export default function Homeroom() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   }
 
@@ -43,6 +47,7 @@ export default function Homeroom() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   }
 
@@ -55,6 +60,7 @@ export default function Homeroom() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   }
 
@@ -76,6 +82,7 @@ export default function Homeroom() {
       }
     } catch (err) {
       console.error(err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     } finally {
       setLoading(false);
     }
@@ -137,7 +144,8 @@ export default function Homeroom() {
       link.parentNode.removeChild(link);
     } catch (error) {
       console.error("Lỗi xuất excel", error);
-      toast.error("Không thể xuất file Excel.");
+      showError(error?.response?.data?.message || error?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+      showError("Không thể xuất file Excel.");
     }
   };
 

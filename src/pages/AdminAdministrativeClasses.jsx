@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
@@ -20,6 +21,8 @@ import api from '../utils/api';
 import '../css/AdminAdministrativeClasses.css';
 
 export default function AdminAdministrativeClasses() {
+  const { showError } = useError();
+
   const { confirm } = useConfirm();
   // --- VIEW STATE ---
   const [view, setView] = useState('list'); // 'list' | 'import'
@@ -100,7 +103,7 @@ export default function AdminAdministrativeClasses() {
 
   const handleSaveEdit = async () => {
     if (!editName.trim() || !editCohortYear.trim()) {
-      toast.error('Vui lòng nhập Tên lớp và Khóa học!');
+      showError('Vui lòng nhập Tên lớp và Khóa học!');
       return;
     }
 
@@ -121,7 +124,7 @@ export default function AdminAdministrativeClasses() {
       setEditingClass(null);
       fetchClasses();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Cập nhật thất bại');
+      showError(err.response?.data?.message || 'Cập nhật thất bại');
     } finally {
       setIsSaving(false);
     }
@@ -138,7 +141,7 @@ export default function AdminAdministrativeClasses() {
       await api.delete(`/api/v1/administrative-classes/${cls.id}`);
       fetchClasses();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Xóa thất bại');
+      showError(err.response?.data?.message || 'Xóa thất bại');
     } finally {
       setIsDeleting(null);
     }
@@ -157,17 +160,18 @@ export default function AdminAdministrativeClasses() {
       setDepartments(res.data.result || []);
     } catch (err) {
       console.error('Lỗi lấy danh sách ngành', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     }
   };
 
   const handleSaveAdd = async () => {
     if (!addCode.trim() || !addName.trim() || !addCohortYear.trim()) {
-      toast.error('Vui lòng nhập Mã lớp, Tên lớp và Khóa học!');
+      showError('Vui lòng nhập Mã lớp, Tên lớp và Khóa học!');
       return;
     }
 
     if (!addDepartmentId) {
-      toast.error('Vui lòng chọn Ngành!');
+      showError('Vui lòng chọn Ngành!');
       return;
     }
 
@@ -185,7 +189,7 @@ export default function AdminAdministrativeClasses() {
       setIsAdding(false);
       fetchClasses();
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Thêm mới thất bại. Vui lòng thử lại.'
       );
@@ -264,7 +268,7 @@ export default function AdminAdministrativeClasses() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 

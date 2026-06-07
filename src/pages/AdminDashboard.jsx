@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 // AdminDashboard.jsx
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
@@ -5,6 +6,8 @@ import api from '../utils/api';
 import '../css/AdminDashboard.css';
 
 export default function AdminDashboard() {
+  const { showError } = useError();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +20,7 @@ export default function AdminDashboard() {
       setError(null);
     } catch (err) {
       console.error("Lỗi khi tải dữ liệu dashboard:", err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       setError("Không thể kết nối đến máy chủ. Vui lòng thử lại sau.");
     } finally {
       setLoading(false);
@@ -41,7 +45,8 @@ export default function AdminDashboard() {
       fetchDashboard();
     } catch (err) {
       console.error("Lỗi xử lý yêu cầu:", err);
-      toast.error(err.response?.data?.message || "Không thể thực hiện phê duyệt.");
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+      showError(err.response?.data?.message || "Không thể thực hiện phê duyệt.");
     }
   };
 

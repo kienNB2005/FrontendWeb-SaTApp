@@ -1,3 +1,4 @@
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import {
@@ -19,6 +20,8 @@ import api from '../utils/api';
 import '../css/AdminTkb.css';
 
 export default function AdminTkb() {
+  const { showError } = useError();
+
   const [view, setView] = useState('list'); // 'list' | 'import'
   const [step, setStep] = useState('upload'); // upload | analyzing | preview | importing | success
 
@@ -104,6 +107,7 @@ export default function AdminTkb() {
       }
     } catch (err) {
       console.error('Failed to fetch semesters:', err);
+      showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
     } finally {
       setIsSemestersLoading(false);
     }
@@ -150,7 +154,7 @@ export default function AdminTkb() {
     if (!file) return;
 
     if (!file.name.match(/\.(xlsx|xls|csv)$/)) {
-      toast.error('Vui lòng chọn file Excel (.xlsx, .xls) hoặc CSV');
+      showError('Vui lòng chọn file Excel (.xlsx, .xls) hoặc CSV');
       e.target.value = null;
       return;
     }
@@ -188,7 +192,7 @@ export default function AdminTkb() {
         setStep('preview');
       }, 600);
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Đã xảy ra lỗi khi đọc file Excel. Vui lòng kiểm tra lại định dạng file.'
       );
@@ -200,7 +204,7 @@ export default function AdminTkb() {
 
   const startImport = async () => {
     if (!selectedSemester) {
-      toast.error('Vui lòng chọn học kỳ trước khi xác nhận nhập dữ liệu!');
+      showError('Vui lòng chọn học kỳ trước khi xác nhận nhập dữ liệu!');
       return;
     }
 
@@ -209,7 +213,7 @@ export default function AdminTkb() {
       .map((item) => item.schedule);
 
     if (validSchedules.length === 0) {
-      toast.error('Không có dòng dữ liệu hợp lệ nào để import!');
+      showError('Không có dòng dữ liệu hợp lệ nào để import!');
       return;
     }
 
@@ -250,7 +254,7 @@ export default function AdminTkb() {
         setStep('success');
       }, 600);
     } catch (err) {
-      toast.error(
+      showError(
         err.response?.data?.message ||
           'Có lỗi xảy ra khi xác nhận Import. Vui lòng thử lại!'
       );
@@ -274,7 +278,7 @@ export default function AdminTkb() {
       link.click();
       link.remove();
     } catch {
-      toast.error('Không thể tải file mẫu. Vui lòng thử lại sau.');
+      showError('Không thể tải file mẫu. Vui lòng thử lại sau.');
     }
   };
 
