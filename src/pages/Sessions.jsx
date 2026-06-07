@@ -69,6 +69,8 @@ export default function Sessions() {
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
+  const [myRequests, setMyRequests] = useState([]);
+
   // States cho Hủy buổi
   const [cancelModalSessionId, setCancelModalSessionId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
@@ -154,12 +156,15 @@ export default function Sessions() {
     if (!selectedClass || !selectedSubject) return;
     setLoading(true);
     setError(null);
-    api.get('/api/v1/sessions', {
-      params: { adminClassId: selectedClass.id, subjectId: selectedSubject.id }
-    })
-      .then(({ data }) => {
-        const list = data.result ?? data.data ?? data;
+    Promise.all([
+      api.get('/api/v1/sessions', { params: { adminClassId: selectedClass.id, subjectId: selectedSubject.id } }),
+      api.get('/api/v1/session-requests/my-requests')
+    ])
+      .then(([sessionRes, requestRes]) => {
+        const list = sessionRes.data?.result ?? sessionRes.data?.data ?? sessionRes.data ?? [];
         setSessions(list);
+        const reqList = requestRes.data?.result ?? requestRes.data?.data ?? requestRes.data ?? [];
+        setMyRequests(reqList);
       })
       .catch((err) => setError(friendlyError(err)))
       .finally(() => setLoading(false));
@@ -260,6 +265,8 @@ export default function Sessions() {
     const busy = actionLoading === sId;
     const hasOpen = sessions.some((s) => s.status?.toLowerCase() === 'open');
     const hasMakeup = session.activeMakeupCount > 0;
+    const pendingCancel = myRequests.find(req => (req.classSession?.id === sId || req.classSessionId === sId) && req.cancelStatus === 'pending');
+    const pendingMakeup = myRequests.find(req => (req.classSession?.id === sId || req.classSessionId === sId) && req.makeupStatus === 'pending');
 
     const btnStyle = { width: '100px', justifyContent: 'center', display: 'inline-flex', alignItems: 'center', gap: '4px' };
     const fullBtnStyle = { width: '208px', justifyContent: 'center', display: 'inline-flex', alignItems: 'center', gap: '4px' };
@@ -281,21 +288,27 @@ export default function Sessions() {
         return (
           <div style={{ display: 'flex', gap: 8 }}>
             {!hasMakeup && !session.makeupForId ? (
-              <button 
-                className="btn btn-a btn-sm" 
-                style={btnStyle}
-                onClick={() => {
-                  setMakeupModalSessionId(sId);
-                  setMakeupForm({
-                    sessionDate: session.sessionDate || "",
-                    periodStart: session.periodStart || 1,
-                    periodEnd: session.periodEnd || 3,
-                    roomId: ""
-                  });
-                }}
-              >
-                📅 Dạy bù
-              </button>
+              pendingMakeup ? (
+                <span style={{ color: '#F59E0B', fontSize: '11px', fontStyle: 'italic', lineHeight: '24px', paddingLeft: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  ⏳ Chờ duyệt bù
+                </span>
+              ) : (
+                <button 
+                  className="btn btn-a btn-sm" 
+                  style={btnStyle}
+                  onClick={() => {
+                    setMakeupModalSessionId(sId);
+                    setMakeupForm({
+                      sessionDate: session.sessionDate || "",
+                      periodStart: session.periodStart || 1,
+                      periodEnd: session.periodEnd || 3,
+                      roomId: ""
+                    });
+                  }}
+                >
+                  📅 Dạy bù
+                </button>
+              )
             ) : (
               <span style={{ color: 'var(--tx3)', fontSize: '11px', fontStyle: 'italic', lineHeight: '24px', paddingLeft: '4px' }}>
                 {hasMakeup ? 'Đã lên lịch bù' : 'Buổi dạy bù'}
@@ -344,14 +357,20 @@ export default function Sessions() {
             >
               {busy ? '...' : '▶ Mã QR'}
             </button>
-            <button
-              className="btn btn-d btn-sm"
-              style={btnStyle}
-              disabled={busy || hasOpen}
-              onClick={() => setCancelModalSessionId(sId)}
-            >
-              ❌ Hủy
-            </button>
+            {pendingCancel ? (
+              <span style={{ color: '#F59E0B', fontSize: '11px', fontStyle: 'italic', lineHeight: '24px', paddingLeft: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                ⏳ Chờ duyệt hủy
+              </span>
+            ) : (
+              <button
+                className="btn btn-d btn-sm"
+                style={btnStyle}
+                disabled={busy || hasOpen}
+                onClick={() => setCancelModalSessionId(sId)}
+              >
+                ❌ Hủy
+              </button>
+            )}
           </div>
         );
     }
