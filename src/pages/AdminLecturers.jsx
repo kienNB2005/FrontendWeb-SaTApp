@@ -30,6 +30,7 @@ const DEFAULT_ADD_FORM = {
   gender: '',
   birthday: '',
   birthPlace: '',
+  role: 'lecturer',
 };
 
 const DEFAULT_EDIT_FORM = {
@@ -41,6 +42,7 @@ const DEFAULT_EDIT_FORM = {
   gender: '',
   birthday: '',
   birthPlace: '',
+  role: 'lecturer',
 };
 
 export default function AdminLecturers() {
@@ -190,6 +192,7 @@ export default function AdminLecturers() {
       gender: lecturer.gender || '',
       birthday: lecturer.birthday || '',
       birthPlace: lecturer.birthPlace || '',
+      role: lecturer.role || 'lecturer',
     });
 
     setEditError('');
@@ -402,6 +405,12 @@ export default function AdminLecturers() {
     if (gender === 'female') return 'Nữ';
     if (gender === 'other') return 'Khác';
     return '—';
+  };
+
+  const getRoleLabel = (role) => {
+    if (role === 'admin') return 'Admin';
+    if (role === 'lecturer') return 'Giảng viên';
+    return role || '—';
   };
 
   const renderHeader = () => (
@@ -896,6 +905,7 @@ export default function AdminLecturers() {
               <th>Mã GV</th>
               <th>Họ tên</th>
               <th>Email</th>
+              <th>Vai trò</th>
               <th>SĐT</th>
               <th>Giới tính</th>
               <th>Khoa</th>
@@ -924,6 +934,8 @@ export default function AdminLecturers() {
                 </td>
 
                 <td className="alc-email-cell" data-label="Email">{lecturer.email}</td>
+
+                <td data-label="Vai trò">{getRoleLabel(lecturer.role)}</td>
 
                 <td className="alc-muted-cell" data-label="SĐT">{lecturer.phoneNumber || '—'}</td>
 
@@ -1162,6 +1174,17 @@ function LecturerModal({
                 {faculty.code} - {faculty.name}
               </option>
             ))}
+          </select>
+        </FormGroup>
+
+        <FormGroup label="Vai trò">
+          <select
+            value={form.role}
+            onChange={(e) => onChange('role', e.target.value)}
+            className="alc-input"
+          >
+            <option value="lecturer">Giảng viên</option>
+            <option value="admin">Admin</option>
           </select>
         </FormGroup>
 

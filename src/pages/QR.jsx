@@ -213,19 +213,21 @@ export default function QR() {
         .then((res) => {
           applyQrResponse(res.data.result);
           fetchDetail();
+          connectSse();
         })
         .catch((err) => {
           const msg = friendlyError(err);
 
           if (err?.response?.data?.code === 'SESSION_ALREADY_OPEN') {
             fetchDetail();
+            connectSse();
           } else {
             setOpenError(msg);
           }
         })
         .finally(() => {
           setQrLoading(false);
-          connectSse();
+
         });
     });
 

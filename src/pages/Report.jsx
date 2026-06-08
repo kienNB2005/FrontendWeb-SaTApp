@@ -68,6 +68,9 @@ export default function Report() {
       const res = await api.get(`/api/v1/reports/lecturer/classes?semesterId=${semesterId}`);
       if (res.data.code === 1000) {
         setClasses(res.data.result);
+        // Reset subject trước, rồi mới set class mới
+        setSelectedSubject('');
+        setSubjects([]);
         if (res.data.result.length > 0) {
           setSelectedClass(res.data.result[0].id);
         } else {
@@ -81,6 +84,9 @@ export default function Report() {
   };
 
   const fetchSubjects = async (semesterId, adminClassId) => {
+    // Reset subject TRƯỚC khi fetch để tránh gọi /data với subjectId cũ
+    setSelectedSubject('');
+    setSubjects([]);
     try {
       const res = await api.get(`/api/v1/reports/lecturer/subjects?semesterId=${semesterId}&adminClassId=${adminClassId}`);
       if (res.data.code === 1000) {
@@ -202,7 +208,11 @@ export default function Report() {
           className="fi" 
           style={{ width: '180px' }} 
           value={selectedSemester} 
-          onChange={e => setSelectedSemester(e.target.value)}
+          onChange={e => {
+            setSelectedSemester(e.target.value);
+            setSelectedClass('');
+            setSelectedSubject('');
+          }}
         >
           {semesters.length === 0 && <option value="">-- Học kỳ --</option>}
           {semesters.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -212,7 +222,10 @@ export default function Report() {
           className="fi" 
           style={{ width: '160px' }} 
           value={selectedClass} 
-          onChange={e => setSelectedClass(e.target.value)}
+          onChange={e => {
+            setSelectedClass(e.target.value);
+            setSelectedSubject('');
+          }}
         >
           {classes.length === 0 && <option value="">-- Lớp --</option>}
           {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
