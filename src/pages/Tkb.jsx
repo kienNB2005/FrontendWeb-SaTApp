@@ -34,12 +34,11 @@ export default function Tkb() {
     { label: 'Tối (T.13-15)', key: '13-15' },
   ];
 
-  const colors = ['#22C55E', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6', '#14B8A6', '#EC4899'];
-  const getSubjectColor = (subjectName) => {
-    if (!subjectName) return colors[0];
-    let hash = 0;
-    for (let i = 0; i < subjectName.length; i++) hash = subjectName.charCodeAt(i) + ((hash << 5) - hash);
-    return colors[Math.abs(hash) % colors.length];
+  const getCardStyle = (status) => {
+    if (status === 'cancelled') return { bg: 'var(--rdL)', border: 'var(--rd)', opacity: 0.6 };
+    if (status === 'open') return { bg: 'var(--tlL)', border: 'var(--tl)', opacity: 1 };
+    if (status === 'closed') return { bg: 'var(--bg4)', border: 'var(--bd2)', opacity: 0.8 };
+    return { bg: 'var(--primary-tint)', border: 'var(--primary)', opacity: 1 };
   };
 
   const formatDate = (dateStr) => {
@@ -189,7 +188,6 @@ export default function Tkb() {
         subject: item.subjectName,
         class: item.adminClassName || item.className,
         room: item.roomCode,
-        color: getSubjectColor(item.subjectName),
         startWeek: startW,
         endWeek: endW,
         sessionDate: item.sessionDate,
@@ -257,32 +255,43 @@ export default function Tkb() {
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: viewMode !== 'today' ? '900px' : 'auto' }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
-                <th style={{ padding: '16px 12px', borderBottom: '1px solid var(--bd)', textAlign: 'left', width: '100px', color: 'var(--tx3)', fontSize: '12px', fontWeight: '600' }}>Ca học</th>
-                {displayDays.map(d => (
-                  <th key={d} style={{ padding: '16px 12px', borderBottom: '1px solid var(--bd)', borderLeft: '1px solid var(--bd)', textAlign: 'center', width: viewMode !== 'today' ? '15%' : 'auto', color: 'var(--tx3)', fontSize: '12px', fontWeight: '600' }}>{d}</th>
-                ))}
+                <th style={{ padding: '16px 12px', borderBottom: '1px solid var(--bd)', textAlign: 'left', width: '140px', whiteSpace: 'nowrap', color: 'var(--tx3)', fontSize: '12px', fontWeight: '600' }}>Ca học</th>
+                {displayDays.map(d => {
+                  const isToday = d === todayStr;
+                  return (
+                    <th key={d} style={{ padding: '16px 12px', borderBottom: '1px solid var(--bd)', borderLeft: '1px solid var(--bd)', textAlign: 'center', width: viewMode !== 'today' ? '15%' : 'auto', color: isToday ? 'var(--primary)' : 'var(--tx3)', fontSize: '12px', fontWeight: isToday ? '700' : '600' }}>
+                      {d}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
               {periods.map((p, idx) => (
                 <React.Fragment key={p.key}>
                   <tr>
-                    <td style={{ padding: '15px 10px', borderBottom: '1px solid var(--bd)', fontWeight: '600', fontSize: '12px', color: 'var(--tx3)', verticalAlign: 'top', background: 'var(--bg3)' }}>
+                    <td style={{ padding: '15px 10px', borderBottom: '1px solid var(--bd)', fontWeight: '600', fontSize: '12px', color: 'var(--tx3)', verticalAlign: 'top', background: 'var(--bg3)', whiteSpace: 'nowrap' }}>
                       {p.label}
                     </td>
                     {displayDays.map(d => {
+                      const isToday = d === todayStr;
                       const classes = scheduleData[`${d}_${p.key}`] || [];
                       return (
                         <td key={`${d}_${p.key}`} style={{ padding: '8px', borderBottom: '1px solid var(--bd)', borderLeft: '1px solid var(--bd)', verticalAlign: 'top', height: '120px' }}>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '100%' }}>
-                            {classes.map(cls => (
+                            {classes.map(cls => {
+                              const cStyle = getCardStyle(cls.status);
+                              return (
                               <div 
                                 key={cls.id}
                                 onMouseEnter={() => setHoveredId(cls.id)}
                                 onMouseLeave={() => setHoveredId(null)}
-                                style={{ position: 'relative', zIndex: hoveredId === cls.id ? 50 : 1, background: `${cls.color}15`, borderLeft: `4px solid ${cls.color}`, padding: '12px', borderRadius: '6px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: '0.2s', transform: hoveredId === cls.id ? 'translateY(-2px)' : 'none', boxShadow: hoveredId === cls.id ? '0 4px 12px rgba(0,0,0,0.05)' : 'none' }}
+                                style={{ position: 'relative', zIndex: hoveredId === cls.id ? 50 : 1, background: cStyle.bg, borderLeft: `4px solid ${cStyle.border}`, opacity: cStyle.opacity, padding: '12px', borderRadius: '6px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'pointer', transition: '0.2s', transform: hoveredId === cls.id ? 'translateY(-2px)' : 'none', boxShadow: hoveredId === cls.id ? '0 4px 12px rgba(0,0,0,0.05)' : 'none' }}
                               >
-                                <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--tx)' }}>{cls.subject}</div>
+                                {cls.status === 'cancelled' && (
+                                  <span style={{ display: 'inline-block', padding: '2px 6px', background: 'rgba(220, 38, 38, 0.1)', color: 'var(--rd)', borderRadius: '4px', fontSize: '10px', fontWeight: '700', marginBottom: '6px', width: 'max-content' }}>Đã hủy</span>
+                                )}
+                                <div style={{ fontSize: '13px', fontWeight: '700', color: cls.status === 'cancelled' ? 'var(--tx3)' : 'var(--tx)', textDecoration: cls.status === 'cancelled' ? 'line-through' : 'none' }}>{cls.subject}</div>
                                 <div style={{ fontSize: '11px', color: 'var(--tx3)', marginTop: '4px' }}>{cls.class}</div>
                                 {viewMode === 'week' && cls.startWeek && cls.endWeek && (
                                   <div style={{ fontSize: '11px', color: 'var(--tx3)', marginTop: '4px', fontWeight: '500' }}>Tuần {cls.startWeek} - {cls.endWeek}</div>
@@ -340,7 +349,8 @@ export default function Tkb() {
                                   </div>
                                 )}
                               </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </td>
                       );

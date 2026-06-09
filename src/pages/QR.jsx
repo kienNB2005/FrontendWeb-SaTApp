@@ -60,6 +60,7 @@ export default function QR() {
   const [isLocked, setIsLocked] = useState(false);
   const [toasts, setToasts] = useState([]);
   const [openError, setOpenError] = useState(null);
+  const [qrMaximized, setQrMaximized] = useState(false);
 
   const sseRef = useRef(null);
   const timerRef = useRef(null);
@@ -337,6 +338,7 @@ export default function QR() {
             onToggleLock={handleToggleLock}
             onOpenCheckout={() => setModalOpen(true)}
             onCloseSession={handleCloseSession}
+            onMaximize={() => setQrMaximized(true)}
           />
 
           <AttendancePanel
@@ -354,6 +356,15 @@ export default function QR() {
 
       {openError && (
         <OpenErrorModal openError={openError} onBack={() => navigate(-1)} />
+      )}
+
+      {qrMaximized && qrData && (
+        <div className="qr-fullscreen-overlay" onClick={() => setQrMaximized(false)}>
+          <div className="qr-fullscreen-content" onClick={(e) => e.stopPropagation()}>
+            <QRCodeSVG value={qrData} size={600} level="M" className="qr-fullscreen-svg" />
+            <div className="qr-fullscreen-close" onClick={() => setQrMaximized(false)}>Đóng (Click ra ngoài)</div>
+          </div>
+        </div>
       )}
 
       <CheckoutModal
@@ -404,21 +415,38 @@ function QrHeader({ session, sessionLoading, sessionClosed }) {
 
   return (
     <div className="qr-header">
-      <div className="qr-header-title">
-        QR Điểm danh · Buổi {session.sessionNumber}/{session.totalSessions}
-        {sessionClosed && <span className="badge-closed">Đã kết thúc</span>}
-      </div>
+      <div className="qr-title-icon">📝</div>
+      
+      <div className="qr-header-content">
+        <div className="qr-header-title-row">
+          <div className="qr-title-main" title={`${session.subjectName} (${session.subjectCode})`}>
+            {session.subjectName} <span className="qr-subject-code">({session.subjectCode})</span>
+          </div>
+          {sessionClosed && <div className="badge-closed">Đã kết thúc</div>}
+        </div>
 
-      <div className="qr-header-sub">
-        {session.subjectName} ({session.subjectCode}) &nbsp;·&nbsp;Lớp{' '}
-        {session.className} &nbsp;·&nbsp;Tiết {session.periodStart}–
-        {session.periodEnd}
-        {session.periodStartTime &&
-          ` (${String(session.periodStartTime).slice(0, 5)}–${String(
-            session.periodEndTime || ''
-          ).slice(0, 5)})`}
-        &nbsp;·&nbsp;Phòng {session.roomCode}
-        {session.building ? ` - ${session.building}` : ''}
+        <div className="qr-header-details">
+          <div className="qr-detail-item">
+            <span className="qr-detail-label">Buổi</span> {session.sessionNumber}/{session.totalSessions}
+          </div>
+          <div className="qr-detail-divider" />
+          <div className="qr-detail-item">
+            <span className="qr-detail-label">Lớp</span> {session.className}
+          </div>
+          <div className="qr-detail-divider" />
+          <div className="qr-detail-item">
+            <span className="qr-detail-label">Thời gian</span> Tiết {session.periodStart}–{session.periodEnd}
+            {session.periodStartTime &&
+              ` (${String(session.periodStartTime).slice(0, 5)}–${String(
+                session.periodEndTime || ''
+              ).slice(0, 5)})`}
+          </div>
+          <div className="qr-detail-divider" />
+          <div className="qr-detail-item">
+            <span className="qr-detail-label">Phòng</span> {session.roomCode}
+            {session.building ? ` - ${session.building}` : ''}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -439,6 +467,7 @@ function QrPanel({
   onToggleLock,
   onOpenCheckout,
   onCloseSession,
+  onMaximize,
 }) {
   return (
     <div className="qr-left">
@@ -446,7 +475,7 @@ function QrPanel({
         {isCheckout ? '⚡ Chế độ CHECK-OUT' : '✅ Chế độ CHECK-IN'}
       </div>
 
-      <QrDisplay qrData={qrData} qrLoading={qrLoading} isLocked={isLocked} />
+      <QrDisplay qrData={qrData} qrLoading={qrLoading} isLocked={isLocked} onMaximize={onMaximize} />
 
       <QrTimer
         isLocked={isLocked}
@@ -494,7 +523,7 @@ function QrPanel({
   );
 }
 
-function QrDisplay({ qrData, qrLoading, isLocked }) {
+function QrDisplay({ qrData, qrLoading, isLocked, onMaximize }) {
   return (
     <div className="qr-area">
       {isLocked ? (
@@ -510,9 +539,17 @@ function QrDisplay({ qrData, qrLoading, isLocked }) {
         <>
           {qrLoading && <div className="qr-overlay">Đang làm mới QR…</div>}
 
-          <div className="qr-inner">
+          <div 
+            className="qr-inner" 
+            onClick={qrData ? onMaximize : undefined}
+            style={{ cursor: qrData ? 'zoom-in' : 'default' }}
+            title={qrData ? "Phóng to mã QR" : ""}
+          >
             {qrData ? (
-              <QRCodeSVG value={qrData} size={212} level="M" />
+              <>
+                <QRCodeSVG value={qrData} size={212} level="M" />
+                <div className="qr-zoom-hint">🔍 Nhấn để phóng to</div>
+              </>
             ) : (
               <div className="qr-empty">Chưa có mã QR</div>
             )}
