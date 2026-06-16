@@ -88,6 +88,12 @@ export default function Dashboard() {
             },
           ]);
         }
+
+        // Tự động chuyển hướng sang trang QR nếu có buổi học đang mở
+        const openSession = json.todaySessions?.find(s => s.status?.toLowerCase() === 'open');
+        if (openSession) {
+          navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
+        }
       })
       .catch((err) => {
         if (err.name === 'AbortError' || err.name === 'CanceledError') return;
@@ -155,22 +161,6 @@ function DashboardHeader({ semesters, selectedSemesterId, setSelectedSemesterId 
   return (
     <div className="db-header">
       <h2>Tổng quan Giảng dạy</h2>
-
-      <select
-        className="fi db-semester-select"
-        value={selectedSemesterId ?? ''}
-        onChange={(e) =>
-          setSelectedSemesterId(e.target.value ? Number(e.target.value) : null)
-        }
-      >
-        <option value="">Học kỳ hiện tại</option>
-
-        {semesters.map((semester) => (
-          <option key={semester.id} value={semester.id}>
-            {semester.name}
-          </option>
-        ))}
-      </select>
     </div>
   );
 }
