@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import api from '../utils/api';
 import '../css/Dashboard.css';
@@ -51,6 +51,7 @@ function friendlyError(err) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [semesters, setSemesters] = useState([]);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
@@ -89,26 +90,24 @@ export default function Dashboard() {
           ]);
         }
 
-        // Tự động chuyển hướng sang trang QR nếu có BẤT KỲ buổi học nào đang mở
-        const allSessions = [...(json.todaySessions || []), ...(json.weekSessions || [])];
-        const openSession = allSessions.find(s => s.status?.toLowerCase() === 'open');
-        if (openSession) {
-          navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
-        } else if (json.semesterSummary?.openCount > 0) {
-          // Buổi học đang mở nằm ngoài tuần này (ví dụ tuần trước quên đóng)
-          // Thử gọi API lấy danh sách các buổi đang mở
-          api.get('/api/v1/sessions', { params: { status: 'OPEN' } })
-            .then(openRes => {
-              const list = openRes.data?.result ?? openRes.data?.data ?? openRes.data ?? [];
-              const openS = list.find(s => s.status?.toLowerCase() === 'open');
-              if (openS) {
-                navigate(`/qr?sessionId=${openS.id || openS.classSessionId}`, { replace: true });
-              }
-            })
-            .catch(() => {
-              // Fallback nếu backend không hỗ trợ filter này
-              console.warn("Không thể tìm ID của buổi học đang mở ở tuần trước.");
-            });
+        // Tự động chuyển hướng sang trang QR nếu có BẤT KỲ buổi học nào đang mở và không phải click từ Sidebar
+        if (!location.state?.fromSidebar) {
+          const allSessions = [...(json.todaySessions || []), ...(json.weekSessions || [])];
+          const openSession = allSessions.find(s => s.status?.toLowerCase() === 'open');
+          if (openSession) {
+            navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
+          } else if (json.semesterSummary?.openCount > 0) {
+            // Buổi học đang mở nằm ngoài tuần này (ví dụ tuần trước quên đóng)
+            api.get('/api/v1/sessions', { params: { status: 'OPEN' } })
+              .then(openRes => {
+                const list = openRes.data?.result ?? openRes.data?.data ?? openRes.data ?? [];
+                const openS = list.find(s => s.status?.toLowerCase() === 'open');
+                if (openS) {
+                  navigate(`/qr?sessionId=${openS.id || openS.classSessionId}`, { replace: true });
+                }
+              })
+              .catch(() => {});
+          }
         }
       })
       .catch((err) => {

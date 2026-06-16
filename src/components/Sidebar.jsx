@@ -69,7 +69,7 @@ export default function Sidebar({ role, isOpen, onClose }) {
       {!isAdmin ? (
         <div id="nav-gv">
           <div className="sb-sec">Quản lý giảng dạy</div>
-          <NavLink to="/" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`} end>
+          <NavLink to="/" state={{ fromSidebar: true }} className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`} end>
             <LayoutDashboard size={16} className="sb-icon" />
             <span>Tổng quan</span>
           </NavLink>
