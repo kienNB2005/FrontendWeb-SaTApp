@@ -89,8 +89,9 @@ export default function Dashboard() {
           ]);
         }
 
-        // Tự động chuyển hướng sang trang QR nếu có buổi học đang mở
-        const openSession = json.todaySessions?.find(s => s.status?.toLowerCase() === 'open');
+        // Tự động chuyển hướng sang trang QR nếu có BẤT KỲ buổi học nào đang mở
+        const allSessions = [...(json.todaySessions || []), ...(json.weekSessions || [])];
+        const openSession = allSessions.find(s => s.status?.toLowerCase() === 'open');
         if (openSession) {
           navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
         }
