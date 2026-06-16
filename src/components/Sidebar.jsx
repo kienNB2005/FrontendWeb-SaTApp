@@ -3,7 +3,7 @@ import api from '../utils/api';
 import logo from "../assets/img/student-attendance-logo.png";
 import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
           BookOpen, Users, UserCog, DoorOpen, Library, Bookmark,
-          ChartColumn, LogOut} from "lucide-react";
+          ChartColumn, LogOut, ClipboardCheck, ListTodo, Contact} from "lucide-react";
 
 export default function Sidebar({ role, isOpen, onClose }) {
   const isAdmin = role === 'admin';
@@ -70,24 +70,30 @@ export default function Sidebar({ role, isOpen, onClose }) {
         <div id="nav-gv">
           <div className="sb-sec">Quản lý giảng dạy</div>
           <NavLink to="/" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`} end>
-            <span className="dot"></span>Tổng quan
+            <LayoutDashboard size={16} className="sb-icon" />
+            <span>Tổng quan</span>
           </NavLink>
           <NavLink to="/tkb" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`}>
-            <span className="dot"></span>Thời khóa biểu
+            <CalendarDays size={16} className="sb-icon" />
+            <span>Thời khóa biểu</span>
           </NavLink>
           <NavLink to="/sessions" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`}>
-            <span className="dot"></span>Sổ điểm danh
+            <ClipboardCheck size={16} className="sb-icon" />
+            <span>Sổ điểm danh</span>
           </NavLink>
           <NavLink to="/requests" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`}>
-            <span className="dot"></span>Yêu cầu của tôi
+            <ListTodo size={16} className="sb-icon" />
+            <span>Yêu cầu của tôi</span>
           </NavLink>
 
           <div className="sb-sec">Báo cáo</div>
           <NavLink to="/report" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`}>
-            <span className="dot"></span>Lớp giảng dạy
+            <ChartColumn size={16} className="sb-icon" />
+            <span>Lớp giảng dạy</span>
           </NavLink>
           <NavLink to="/homeroom" className={({ isActive }) => `sb-it ${isActive ? 'on' : ''}`}>
-            <span className="dot"></span>Lớp chủ nhiệm
+            <Contact size={16} className="sb-icon" />
+            <span>Lớp chủ nhiệm</span>
           </NavLink>
         </div>
       ) : (
