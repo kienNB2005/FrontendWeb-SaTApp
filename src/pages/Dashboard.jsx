@@ -96,28 +96,6 @@ export default function Dashboard() {
           const openSession = allSessions.find(s => s.status?.toLowerCase() === 'open');
           if (openSession) {
             navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
-          } else if (json.semesterSummary?.openCount > 0) {
-            // Buổi học đang mở nằm ngoài tuần này (ví dụ tuần trước quên đóng)
-            // Vì API không hỗ trợ fetch tất cả, ta sẽ quét qua các tuần của học kỳ (từ 1 đến 15)
-            const semesterId = json.semesterSummary?.semesterId;
-            if (semesterId) {
-              const weekPromises = Array.from({ length: 15 }, (_, i) => i + 1).map(w => 
-                api.get(`/api/v1/sessions/weekly?semesterId=${semesterId}&weekNumber=${w}`).catch(() => null)
-              );
-              
-              Promise.all(weekPromises).then(responses => {
-                for (const res of responses) {
-                  if (!res || !res.data) continue;
-                  const list = res.data.result ?? res.data.data ?? res.data ?? [];
-                  const openS = list.find(s => s.status?.toLowerCase() === 'open');
-                  if (openS) {
-                    navigate(`/qr?sessionId=${openS.id || openS.classSessionId}`, { replace: true });
-                    return; // Dừng ngay khi tìm thấy
-                  }
-                }
-              });
-            }
-          }
         }
       })
       .catch((err) => {
