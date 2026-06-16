@@ -96,6 +96,7 @@ export default function Dashboard() {
           const openSession = allSessions.find(s => s.status?.toLowerCase() === 'open');
           if (openSession) {
             navigate(`/qr?sessionId=${openSession.classSessionId}`, { replace: true });
+          }
         }
       })
       .catch((err) => {
