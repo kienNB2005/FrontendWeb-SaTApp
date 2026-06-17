@@ -19,10 +19,12 @@ export default function AdminReport() {
 
   const [reportData, setReportData] = useState({ summary: {}, rows: [] });
   const [loading, setLoading] = useState(false);
+  const [filtersLoading, setFiltersLoading] = useState(true);
 
   // Fetch initial data: Semesters and Faculties
   useEffect(() => {
     const fetchFilters = async () => {
+      setFiltersLoading(true);
       try {
         const [semRes, facRes, depRes] = await Promise.all([
           api.get('/api/v1/semesters'),
@@ -46,6 +48,8 @@ export default function AdminReport() {
       } catch (err) {
         console.error('Failed to fetch filters', err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+      } finally {
+        setFiltersLoading(false);
       }
     };
     fetchFilters();
@@ -124,9 +128,10 @@ export default function AdminReport() {
         setSelectedFaculty={setSelectedFaculty}
         selectedDepartment={selectedDepartment}
         setSelectedDepartment={setSelectedDepartment}
+        filtersLoading={filtersLoading}
       />
 
-      {loading && (!reportData.rows || reportData.rows.length === 0) ? (
+      {filtersLoading || (loading && (!reportData.rows || reportData.rows.length === 0)) ? (
         <ReportSkeleton />
       ) : (
         <>
@@ -163,7 +168,8 @@ function ReportToolbar({
   semesters, faculties, departments, 
   selectedSemester, setSelectedSemester, 
   selectedFaculty, setSelectedFaculty,
-  selectedDepartment, setSelectedDepartment 
+  selectedDepartment, setSelectedDepartment,
+  filtersLoading
 }) {
   const filteredDepartments = selectedFaculty 
     ? departments.filter(d => d.facultyId == selectedFaculty) 
@@ -174,33 +180,52 @@ function ReportToolbar({
       <select 
         className="fi ar-filter" 
         value={selectedSemester} 
+        disabled={filtersLoading}
         onChange={(e) => setSelectedSemester(e.target.value)}
       >
-        {semesters.map(s => (
-          <option key={s.id} value={s.id}>{s.name}</option>
-        ))}
+        {filtersLoading ? (
+          <option value="">Đang tải học kỳ...</option>
+        ) : (
+          semesters.map(s => (
+            <option key={s.id} value={s.id}>{s.name}</option>
+          ))
+        )}
       </select>
 
       <select 
         className="fi ar-filter" 
         value={selectedFaculty} 
+        disabled={filtersLoading}
         onChange={(e) => setSelectedFaculty(e.target.value)}
       >
-        <option value="">Tất cả Khoa</option>
-        {faculties.map(f => (
-          <option key={f.id} value={f.id}>{f.name}</option>
-        ))}
+        {filtersLoading ? (
+          <option value="">Đang tải khoa...</option>
+        ) : (
+          <>
+            <option value="">Tất cả Khoa</option>
+            {faculties.map(f => (
+              <option key={f.id} value={f.id}>{f.name}</option>
+            ))}
+          </>
+        )}
       </select>
 
       <select 
         className="fi ar-filter" 
         value={selectedDepartment} 
+        disabled={filtersLoading}
         onChange={(e) => setSelectedDepartment(e.target.value)}
       >
-        <option value="">Tất cả Ngành</option>
-        {filteredDepartments.map(d => (
-          <option key={d.id} value={d.id}>{d.name}</option>
-        ))}
+        {filtersLoading ? (
+          <option value="">Đang tải ngành...</option>
+        ) : (
+          <>
+            <option value="">Tất cả Ngành</option>
+            {filteredDepartments.map(d => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </>
+        )}
       </select>
 
       {/* Đã bỏ nút Xuất Excel và Xuất PDF */}

@@ -18,7 +18,12 @@ export default function Report() {
 
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingSemesters, setLoadingSemesters] = useState(true);
+  const [loadingClasses, setLoadingClasses] = useState(false);
+  const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+
+  const filtersLoading = loadingSemesters || loadingClasses || loadingSubjects;
 
   useEffect(() => {
     fetchSemesters();
@@ -43,38 +48,49 @@ export default function Report() {
   }, [selectedSemester, selectedClass]);
 
   useEffect(() => {
+    if (filtersLoading) return;
+
     if (selectedSemester && selectedClass && selectedSubject) {
       fetchReportData();
     } else {
       setReportData(null);
     }
-  }, [selectedSemester, selectedClass, selectedSubject, absentLimitPct]);
+  }, [selectedSemester, selectedClass, selectedSubject, absentLimitPct, filtersLoading]);
 
   const fetchSemesters = async () => {
+    setLoadingSemesters(true);
     try {
       const res = await api.get('/api/v1/reports/lecturer/semesters');
       if (res.data.code === 1000) {
-        setSemesters(res.data.result);
-        if (res.data.result.length > 0) {
-          setSelectedSemester(res.data.result[0].id);
+        const result = res.data.result || [];
+        setSemesters(result);
+        if (result.length > 0) {
+          setLoadingClasses(true);
+          setSelectedSemester(result[0].id);
+        } else {
+          setSelectedSemester('');
         }
       }
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingSemesters(false);
     }
   };
 
   const fetchClasses = async (semesterId) => {
+    setLoadingClasses(true);
+    setSelectedSubject('');
+    setSubjects([]);
     try {
       const res = await api.get(`/api/v1/reports/lecturer/classes?semesterId=${semesterId}`);
       if (res.data.code === 1000) {
-        setClasses(res.data.result);
-        // Reset subject trước, rồi mới set class mới
-        setSelectedSubject('');
-        setSubjects([]);
-        if (res.data.result.length > 0) {
-          setSelectedClass(res.data.result[0].id);
+        const result = res.data.result || [];
+        setClasses(result);
+        if (result.length > 0) {
+          setLoadingSubjects(true);
+          setSelectedClass(result[0].id);
         } else {
           setSelectedClass('');
         }
@@ -82,19 +98,23 @@ export default function Report() {
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingClasses(false);
     }
   };
 
   const fetchSubjects = async (semesterId, adminClassId) => {
+    setLoadingSubjects(true);
     // Reset subject TRƯỚC khi fetch để tránh gọi /data với subjectId cũ
     setSelectedSubject('');
     setSubjects([]);
     try {
       const res = await api.get(`/api/v1/reports/lecturer/subjects?semesterId=${semesterId}&adminClassId=${adminClassId}`);
       if (res.data.code === 1000) {
-        setSubjects(res.data.result);
-        if (res.data.result.length > 0) {
-          setSelectedSubject(res.data.result[0].id);
+        const result = res.data.result || [];
+        setSubjects(result);
+        if (result.length > 0) {
+          setSelectedSubject(result[0].id);
         } else {
           setSelectedSubject('');
         }
@@ -102,6 +122,8 @@ export default function Report() {
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingSubjects(false);
     }
   };
 
@@ -213,13 +235,21 @@ export default function Report() {
           className="fi" 
           style={{ width: '180px' }} 
           value={selectedSemester} 
+          disabled={loadingSemesters}
           onChange={e => {
+            if (e.target.value) {
+              setLoadingClasses(true);
+            }
             setSelectedSemester(e.target.value);
             setSelectedClass('');
             setSelectedSubject('');
           }}
         >
-          {semesters.length === 0 && <option value="">-- Học kỳ --</option>}
+          {loadingSemesters ? (
+            <option value="">Đang tải học kỳ...</option>
+          ) : (
+            semesters.length === 0 && <option value="">-- Học kỳ --</option>
+          )}
           {semesters.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
         
@@ -227,12 +257,20 @@ export default function Report() {
           className="fi" 
           style={{ width: '160px' }} 
           value={selectedClass} 
+          disabled={loadingClasses || loadingSemesters || !selectedSemester}
           onChange={e => {
+            if (e.target.value) {
+              setLoadingSubjects(true);
+            }
             setSelectedClass(e.target.value);
             setSelectedSubject('');
           }}
         >
-          {classes.length === 0 && <option value="">-- Lớp --</option>}
+          {loadingClasses ? (
+            <option value="">Đang tải lớp...</option>
+          ) : (
+            classes.length === 0 && <option value="">-- Lớp --</option>
+          )}
           {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
 
@@ -240,9 +278,14 @@ export default function Report() {
           className="fi" 
           style={{ width: '220px' }} 
           value={selectedSubject} 
+          disabled={loadingSubjects || loadingClasses || !selectedClass}
           onChange={e => setSelectedSubject(e.target.value)}
         >
-          {subjects.length === 0 && <option value="">-- Môn học --</option>}
+          {loadingSubjects ? (
+            <option value="">Đang tải môn học...</option>
+          ) : (
+            subjects.length === 0 && <option value="">-- Môn học --</option>
+          )}
           {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
 
@@ -254,6 +297,7 @@ export default function Report() {
             style={{ width: '70px', textAlign: 'center' }} 
             value={absentLimitPct} 
             onChange={e => setAbsentLimitPct(e.target.value)} 
+            disabled={filtersLoading}
             min="0" 
             max="100" 
           />
@@ -261,14 +305,14 @@ export default function Report() {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading || exportLoading}>
+          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || filtersLoading || loading || exportLoading}>
             {exportLoading ? <ButtonSpinner size={12} /> : '📥'} Excel
           </button>
-          <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || loading}>📄 PDF</button>
+          <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || filtersLoading || loading}>📄 PDF</button>
         </div>
       </div>
 
-      {loading ? (
+      {filtersLoading || loading ? (
         <ReportSkeleton />
       ) : reportData ? (
         <>

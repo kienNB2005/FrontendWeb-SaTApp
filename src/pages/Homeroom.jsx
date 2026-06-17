@@ -18,31 +18,52 @@ export default function Homeroom() {
 
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingClasses, setLoadingClasses] = useState(true);
+  const [loadingSemesters, setLoadingSemesters] = useState(false);
+  const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+
+  const filtersLoading = loadingClasses || loadingSemesters || loadingSubjects;
 
   // Hoisted fetch functions
   async function fetchClasses() {
+    setLoadingClasses(true);
     try {
       const res = await api.get('/api/v1/reports/homeroom/classes');
       if (res.data.code === 1000) {
-        setClasses(res.data.result);
-        if (res.data.result.length > 0) {
-          setSelectedClass(res.data.result[0].id);
+        const result = res.data.result || [];
+        setClasses(result);
+        if (result.length > 0) {
+          setLoadingSemesters(true);
+          setSelectedClass(result[0].id);
+        } else {
+          setSelectedClass('');
+          setSelectedSemester('');
+          setSelectedSubject('');
+          setSubjects([]);
         }
       }
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingClasses(false);
     }
   }
 
   async function fetchSemesters(adminClassId) {
+    setLoadingSemesters(true);
+    setSelectedSemester('');
+    setSelectedSubject('');
+    setSubjects([]);
     try {
       const res = await api.get(`/api/v1/reports/homeroom/semesters?adminClassId=${adminClassId}`);
       if (res.data.code === 1000) {
-        setSemesters(res.data.result);
-        if (res.data.result.length > 0) {
-          setSelectedSemester(res.data.result[0].id);
+        const result = res.data.result || [];
+        setSemesters(result);
+        if (result.length > 0) {
+          setLoadingSubjects(true);
+          setSelectedSemester(result[0].id);
         } else {
           setSelectedSemester('');
         }
@@ -50,19 +71,24 @@ export default function Homeroom() {
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingSemesters(false);
     }
   }
 
   async function fetchSubjects(adminClassId, semesterId) {
+    setLoadingSubjects(true);
     try {
       const res = await api.get(`/api/v1/reports/homeroom/subjects?adminClassId=${adminClassId}&semesterId=${semesterId}`);
       if (res.data.code === 1000) {
-        setSubjects(res.data.result);
+        setSubjects(res.data.result || []);
         setSelectedSubject(''); // Mặc định là "Tất cả các môn"
       }
     } catch (err) {
       console.error(err);
       showError(err?.response?.data?.message || err?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
+    } finally {
+      setLoadingSubjects(false);
     }
   }
 
@@ -100,6 +126,8 @@ export default function Homeroom() {
     } else {
       Promise.resolve().then(() => setSemesters([]));
       Promise.resolve().then(() => setSelectedSemester(''));
+      Promise.resolve().then(() => setLoadingSemesters(false));
+      Promise.resolve().then(() => setLoadingSubjects(false));
     }
   }, [selectedClass]);
 
@@ -109,16 +137,19 @@ export default function Homeroom() {
     } else {
       Promise.resolve().then(() => setSubjects([]));
       Promise.resolve().then(() => setSelectedSubject(''));
+      Promise.resolve().then(() => setLoadingSubjects(false));
     }
   }, [selectedClass, selectedSemester]);
 
   useEffect(() => {
+    if (filtersLoading) return;
+
     if (selectedClass && selectedSemester) {
       Promise.resolve().then(() => fetchReportData());
     } else {
       Promise.resolve().then(() => setReportData(null));
     }
-  }, [selectedClass, selectedSemester, selectedSubject, absentLimitPct, fetchReportData]);
+  }, [selectedClass, selectedSemester, selectedSubject, absentLimitPct, fetchReportData, filtersLoading]);
 
   
 
@@ -211,9 +242,21 @@ export default function Homeroom() {
           className="fi" 
           style={{ width: '160px' }} 
           value={selectedClass} 
-          onChange={e => setSelectedClass(e.target.value)}
+          disabled={loadingClasses}
+          onChange={e => {
+            if (e.target.value) {
+              setLoadingSemesters(true);
+            }
+            setSelectedClass(e.target.value);
+            setSelectedSemester('');
+            setSelectedSubject('');
+          }}
         >
-          {classes.length === 0 && <option value="">-- Lớp chủ nhiệm --</option>}
+          {loadingClasses ? (
+            <option value="">Đang tải lớp...</option>
+          ) : (
+            classes.length === 0 && <option value="">-- Lớp chủ nhiệm --</option>
+          )}
           {classes.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
 
@@ -221,9 +264,20 @@ export default function Homeroom() {
           className="fi" 
           style={{ width: '180px' }} 
           value={selectedSemester} 
-          onChange={e => setSelectedSemester(e.target.value)}
+          disabled={loadingSemesters || loadingClasses || !selectedClass}
+          onChange={e => {
+            if (e.target.value) {
+              setLoadingSubjects(true);
+            }
+            setSelectedSemester(e.target.value);
+            setSelectedSubject('');
+          }}
         >
-          {semesters.length === 0 && <option value="">-- Học kỳ --</option>}
+          {loadingSemesters ? (
+            <option value="">Đang tải học kỳ...</option>
+          ) : (
+            semesters.length === 0 && <option value="">-- Học kỳ --</option>
+          )}
           {semesters.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
         
@@ -231,9 +285,14 @@ export default function Homeroom() {
           className="fi" 
           style={{ width: '220px' }} 
           value={selectedSubject} 
+          disabled={loadingSubjects || loadingSemesters || !selectedSemester}
           onChange={e => setSelectedSubject(e.target.value)}
         >
-          <option value="">-- Tất cả môn học --</option>
+          {loadingSubjects ? (
+            <option value="">Đang tải môn học...</option>
+          ) : (
+            <option value="">-- Tất cả môn học --</option>
+          )}
           {subjects.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
 
@@ -245,6 +304,7 @@ export default function Homeroom() {
             style={{ width: '70px', textAlign: 'center' }} 
             value={absentLimitPct} 
             onChange={e => setAbsentLimitPct(e.target.value)} 
+            disabled={filtersLoading}
             min="0" 
             max="100" 
           />
@@ -252,14 +312,14 @@ export default function Homeroom() {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading || exportLoading}>
+          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || filtersLoading || loading || exportLoading}>
             {exportLoading ? <ButtonSpinner size={12} /> : '📥'} Excel
           </button>
-          <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || loading}>📄 PDF</button>
+          <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || filtersLoading || loading}>📄 PDF</button>
         </div>
       </div>
 
-      {loading ? (
+      {filtersLoading || loading ? (
         <ReportSkeleton />
       ) : reportData ? (
         <>
