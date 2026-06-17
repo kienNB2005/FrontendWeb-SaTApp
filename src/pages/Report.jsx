@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
@@ -47,7 +47,7 @@ export default function Report() {
     }
   }, [selectedSemester, selectedClass]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (filtersLoading) return;
 
     if (selectedSemester && selectedClass && selectedSubject) {

@@ -1,5 +1,5 @@
 import { useError } from '../contexts/ErrorContext';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
@@ -117,42 +117,39 @@ export default function Homeroom() {
   }, [selectedClass, selectedSemester, selectedSubject, absentLimitPct]);
 
   useEffect(() => {
-    Promise.resolve().then(() => fetchClasses());
+    fetchClasses();
   }, []);
 
   useEffect(() => {
     if (selectedClass) {
-      Promise.resolve().then(() => fetchSemesters(selectedClass));
+      fetchSemesters(selectedClass);
     } else {
-      Promise.resolve().then(() => setSemesters([]));
-      Promise.resolve().then(() => setSelectedSemester(''));
-      Promise.resolve().then(() => setLoadingSemesters(false));
-      Promise.resolve().then(() => setLoadingSubjects(false));
+      setSemesters([]);
+      setSelectedSemester('');
+      setLoadingSemesters(false);
+      setLoadingSubjects(false);
     }
   }, [selectedClass]);
 
   useEffect(() => {
     if (selectedClass && selectedSemester) {
-      Promise.resolve().then(() => fetchSubjects(selectedClass, selectedSemester));
+      fetchSubjects(selectedClass, selectedSemester);
     } else {
-      Promise.resolve().then(() => setSubjects([]));
-      Promise.resolve().then(() => setSelectedSubject(''));
-      Promise.resolve().then(() => setLoadingSubjects(false));
+      setSubjects([]);
+      setSelectedSubject('');
+      setLoadingSubjects(false);
     }
   }, [selectedClass, selectedSemester]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (filtersLoading) return;
 
     if (selectedClass && selectedSemester) {
-      Promise.resolve().then(() => fetchReportData());
+      fetchReportData();
     } else {
-      Promise.resolve().then(() => setReportData(null));
+      setReportData(null);
     }
   }, [selectedClass, selectedSemester, selectedSubject, absentLimitPct, fetchReportData, filtersLoading]);
-
-  
-
   const handleExportExcel = async () => {
     setExportLoading(true);
     try {
