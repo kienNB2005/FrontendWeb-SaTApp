@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import '../css/Login.css';
 import { useError } from '../contexts/ErrorContext';
+import { SkeletonLine } from '../components/LoadingStates';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -11,6 +12,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { showError } = useError();
   const [email, setEmail] = useState('');
+  const [gsiReady, setGsiReady] = useState(false);
 
   // Nếu user đã đăng nhập, tự redirect về trang phù hợp
   useEffect(() => {
@@ -169,6 +171,7 @@ export default function Login() {
           logo_alignment: 'left'
         }
       );
+      setGsiReady(true);
     };
 
     if (window.google) {
@@ -286,7 +289,12 @@ export default function Login() {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', minHeight: '44px' }}>
-                <div id="g_id_signin"></div>
+                <div id="g_id_signin" style={{ display: gsiReady ? 'block' : 'none' }}></div>
+                {!gsiReady && (
+                  <div style={{ width: 300, display: 'flex', alignItems: 'center' }}>
+                    <SkeletonLine width="100%" height={42} radius={6} />
+                  </div>
+                )}
               </div>
 
               <div className="trust-row">

@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 
 import api from '../utils/api';
+import { ButtonSpinner, SkeletonLine } from '../components/LoadingStates';
 import '../css/QR.css';
 
 const TOAST_BG = {
@@ -56,6 +57,7 @@ export default function QR() {
   const [modalOpen, setModalOpen] = useState(false);
   const [checkoutMins, setCheckoutMins] = useState(5);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [closeSessionLoading, setCloseSessionLoading] = useState(false);
   const [checkoutActive, setCheckoutActive] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [toasts, setToasts] = useState([]);
@@ -270,6 +272,7 @@ export default function QR() {
     }
 
     try {
+      setCloseSessionLoading(true);
       await api.patch(`/api/v1/sessions/${sessionId}/status`, {
         status: 'CLOSED',
       });
@@ -281,6 +284,7 @@ export default function QR() {
       }, 1200);
     } catch (err) {
       toast(friendlyError(err), 'error');
+      setCloseSessionLoading(false);
     }
   };
 
@@ -338,6 +342,7 @@ export default function QR() {
             onToggleLock={handleToggleLock}
             onOpenCheckout={() => setModalOpen(true)}
             onCloseSession={handleCloseSession}
+            closeSessionLoading={closeSessionLoading}
             onMaximize={() => setQrMaximized(true)}
           />
 
@@ -400,7 +405,17 @@ function QrHeader({ session, sessionLoading, sessionClosed }) {
   if (sessionLoading) {
     return (
       <div className="qr-header">
-        <div className="qr-header-loading">Đang tải thông tin buổi học…</div>
+        <div className="qr-title-icon">
+          <SkeletonLine width={34} height={34} radius={10} />
+        </div>
+        <div className="qr-header-content">
+          <SkeletonLine width={240} height={18} />
+          <div className="qr-header-details">
+            <SkeletonLine width={110} height={12} />
+            <SkeletonLine width={90} height={12} />
+            <SkeletonLine width={120} height={12} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -467,6 +482,7 @@ function QrPanel({
   onToggleLock,
   onOpenCheckout,
   onCloseSession,
+  closeSessionLoading,
   onMaximize,
 }) {
   return (
@@ -510,12 +526,12 @@ function QrPanel({
             ⚡ Mở Check-out
           </button>
 
-          <button
+                    <button
             className="btn-action btn-close"
-            disabled={sessionClosed}
+            disabled={sessionClosed || closeSessionLoading}
             onClick={onCloseSession}
           >
-            ⏹ Kết thúc buổi
+            {closeSessionLoading ? <ButtonSpinner size={14} /> : '\u23f9'} {'K\u1ebft th\u00fac bu\u1ed5i'}
           </button>
         </div>
       </div>

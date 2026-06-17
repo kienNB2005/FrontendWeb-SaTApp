@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 
 function StatusBadge({ status }) {
   const s = (status || '').toLowerCase();
@@ -49,7 +50,7 @@ export default function LecturerRequests() {
 
       <div className="card">
         {loading ? (
-          <div className="empty-state">Đang tải...</div>
+          <TableSkeleton rows={7} columns={6} />
         ) : requests.length === 0 ? (
           <div className="empty-state">Chưa có yêu cầu nào được gửi.</div>
         ) : (

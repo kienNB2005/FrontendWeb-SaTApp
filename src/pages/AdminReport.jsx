@@ -1,6 +1,7 @@
 import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useMemo } from 'react';
 import api from '../utils/api';
+import { ReportSkeleton, TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminReport.css';
 
 export default function AdminReport() {
@@ -125,15 +126,21 @@ export default function AdminReport() {
         setSelectedDepartment={setSelectedDepartment}
       />
 
-      <ReportStats stats={reportStats} />
+      {loading && (!reportData.rows || reportData.rows.length === 0) ? (
+        <ReportSkeleton />
+      ) : (
+        <>
+          <ReportStats stats={reportStats} />
 
-      <ReportTable 
-        rows={reportData.rows || []} 
-        loading={loading}
-        searchInput={searchInput}
-        setSearchInput={setSearchInput}
-        handleSearch={handleSearch}
-      />
+          <ReportTable
+            rows={reportData.rows || []}
+            loading={loading}
+            searchInput={searchInput}
+            setSearchInput={setSearchInput}
+            handleSearch={handleSearch}
+          />
+        </>
+      )}
     </div>
   );
 }
@@ -254,7 +261,9 @@ function ReportTable({ rows, loading, searchInput, setSearchInput, handleSearch 
           <tbody>
             {loading ? (
               <tr>
-                <td data-label="Tên Lớp" colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>Đang tải dữ liệu...</td>
+                <td colSpan="7" style={{ padding: 0, borderBottom: 0 }}>
+                  <TableSkeleton rows={7} columns={7} />
+                </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>

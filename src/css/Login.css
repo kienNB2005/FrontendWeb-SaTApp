@@ -8,7 +8,7 @@
   --text-muted:  #5a7a9a;
   --text-hint:   #8facc8;
   --border:      rgba(41,121,255,0.15);
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: var(--fn);
   background: var(--blue-pale);
   min-height: 100vh;
   width: 100%;
@@ -102,7 +102,7 @@
 }
 
 .login-page-wrapper .brand-name {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: var(--fn-heading);
   font-size: 20px; font-weight: 800;
   color: var(--blue-deep); letter-spacing: -.01em;
 }
@@ -148,7 +148,7 @@
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
 .login-page-wrapper .hero-title {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: var(--fn-heading);
   font-size: clamp(44px, 5.5vw, 68px);
   font-weight: 800;
   color: var(--blue-deep);
@@ -222,7 +222,7 @@
   height: 36px; background: white; border-bottom: 1px solid #e1e8ed;
   display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
 }
-.login-page-wrapper .ltop-title { font-family:'Be Vietnam Pro',sans-serif; font-size: 11px; font-weight: 700; color: var(--blue-deep); }
+.login-page-wrapper .ltop-title { font-family: var(--fn-heading); font-size: 11px; font-weight: 700; color: var(--blue-deep); }
 .login-page-wrapper .ltop-av { width: 18px; height: 18px; background: var(--blue-bright); border-radius: 50%; }
 
 .login-page-wrapper .lcontent { flex: 1; padding: 14px; display: flex; gap: 14px; }
@@ -298,7 +298,7 @@
 }
 
 .login-page-wrapper .rc-title {
-  font-family: 'Be Vietnam Pro', sans-serif; font-size: 28px; font-weight: 800; color: var(--blue-deep);
+  font-family: var(--fn-heading); font-size: 28px; font-weight: 800; color: var(--blue-deep);
   line-height: 1.2; letter-spacing: -.02em; margin-bottom: 8px;
 }
 

@@ -4,6 +4,7 @@ import { useConfirm } from '../contexts/ConfirmContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import { ButtonSpinner, TableSkeleton } from '../components/LoadingStates';
 
 // Map error codes từ server sang tiếng Việt
 function friendlyError(err) {
@@ -74,6 +75,7 @@ export default function Sessions() {
   // States cho Hủy buổi
   const [cancelModalSessionId, setCancelModalSessionId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
+  const [cancelSubmitting, setCancelSubmitting] = useState(false);
 
   // States cho Lên lịch dạy bù
   const [makeupModalSessionId, setMakeupModalSessionId] = useState(null);
@@ -84,6 +86,7 @@ export default function Sessions() {
     roomId: ""
   });
   const [availableRooms, setAvailableRooms] = useState([]);
+  const [makeupSubmitting, setMakeupSubmitting] = useState(false);
 
   // States cho gợi ý lịch dạy bù
   // const [showSuggestions, setShowSuggestions] = useState(false);
@@ -209,6 +212,7 @@ export default function Sessions() {
 
   async function submitCancel() {
     if (cancelReason.trim().length < 5) return showError("Lý do hủy buổi học quá ngắn.");
+    setCancelSubmitting(true);
     try {
       await api.post(`/api/v1/session-requests/${cancelModalSessionId}/cancel`, { cancelReason: cancelReason });
       setCancelModalSessionId(null);
@@ -217,6 +221,8 @@ export default function Sessions() {
       loadSessions();
     } catch (err) {
       showError(friendlyError(err));
+    } finally {
+      setCancelSubmitting(false);
     }
   }
 
@@ -249,6 +255,7 @@ export default function Sessions() {
       }
     }
     if (!makeupForm.roomId) return showError("Vui lòng chọn phòng học trống.");
+    setMakeupSubmitting(true);
     try {
       await api.post(`/api/v1/session-requests/${makeupModalSessionId}/makeup`, makeupForm);
       setMakeupModalSessionId(null);
@@ -256,6 +263,8 @@ export default function Sessions() {
       loadSessions();
     } catch (err) {
       showError(friendlyError(err));
+    } finally {
+      setMakeupSubmitting(false);
     }
   }
 
@@ -332,7 +341,7 @@ export default function Sessions() {
               disabled={busy}
               onClick={() => handleClose(sId)}
             >
-              {busy ? '...' : '⏹️ Kết thúc'}
+              {busy ? <ButtonSpinner size={12} /> : '⏹️ Kết thúc'}
             </button>
           </div>
         );
@@ -355,7 +364,7 @@ export default function Sessions() {
                 }
               }}
             >
-              {busy ? '...' : '▶ Mã QR'}
+              {busy ? <ButtonSpinner size={12} /> : '▶ Mã QR'}
             </button>
             {pendingCancel ? (
               <span style={{ color: '#F59E0B', fontSize: '11px', fontStyle: 'italic', lineHeight: '24px', paddingLeft: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -445,7 +454,7 @@ export default function Sessions() {
       {/* Main Table */}
       <div className="card">
         {loading ? (
-          <div className="empty-state">Đang tải...</div>
+          <TableSkeleton rows={8} columns={6} />
         ) : sessions.length === 0 ? (
           <div className="empty-state">Không có buổi học nào được tìm thấy.</div>
         ) : (
@@ -519,8 +528,11 @@ export default function Sessions() {
               />
             </div>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button className="btn btn-s" onClick={() => setCancelModalSessionId(null)}>Đóng</button>
-              <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitCancel}>Xác nhận Hủy</button>
+              <button className="btn btn-s" onClick={() => setCancelModalSessionId(null)} disabled={cancelSubmitting}>Đóng</button>
+              <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitCancel} disabled={cancelSubmitting}>
+                {cancelSubmitting ? <ButtonSpinner size={14} /> : null}
+                Xác nhận Hủy
+              </button>
             </div>
           </div>
         </div>
@@ -605,8 +617,11 @@ export default function Sessions() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: 'auto', paddingTop: '16px' }}>
-                  <button className="btn btn-s" onClick={() => setMakeupModalSessionId(null)}>Đóng</button>
-                  <button className="btn btn-p" onClick={submitMakeup}>Xác nhận Lên lịch</button>
+                  <button className="btn btn-s" onClick={() => setMakeupModalSessionId(null)} disabled={makeupSubmitting}>Đóng</button>
+                  <button className="btn btn-p" onClick={submitMakeup} disabled={makeupSubmitting}>
+                    {makeupSubmitting ? <ButtonSpinner size={14} /> : null}
+                    Xác nhận Lên lịch
+                  </button>
                 </div>
               </div>
 

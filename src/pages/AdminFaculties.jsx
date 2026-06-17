@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminFaculties.css';
 
 export default function AdminFaculties() {
@@ -360,17 +361,7 @@ export default function AdminFaculties() {
     </div>
   );
 
-  const renderListLoading = () => (
-    <div className="afc-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse afc-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={7} columns={6} />;
 
   const renderListError = () => (
     <div className="afc-list-state afc-list-error">

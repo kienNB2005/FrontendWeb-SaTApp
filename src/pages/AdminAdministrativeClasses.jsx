@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminAdministrativeClasses.css';
 
 export default function AdminAdministrativeClasses() {
@@ -565,17 +566,7 @@ export default function AdminAdministrativeClasses() {
 
   
 
-  const renderListLoading = () => (
-    <div className="aac-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse aac-list-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={7} columns={6} />;
 
   const renderListError = () => (
     <div className="aac-list-state">

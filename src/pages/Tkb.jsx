@@ -1,7 +1,7 @@
 import { useError } from '../contexts/ErrorContext';
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Loader2 } from 'lucide-react';
+import { ScheduleSkeleton } from '../components/LoadingStates';
 
 export default function Tkb() {
   const { showError } = useError();
@@ -247,10 +247,7 @@ export default function Tkb() {
 
       <div className="card" style={{ padding: '0', overflowX: 'auto', borderRadius: '12px', minHeight: '400px', position: 'relative' }}>
         {loading ? (
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', zIndex: 10 }}>
-            <Loader2 className="spinner" size={24} color="var(--bl)" />
-            <span style={{ marginLeft: '10px', fontSize: '13px', color: 'var(--tx3)', fontWeight: '500' }}>Đang tải thời khóa biểu...</span>
-          </div>
+          <ScheduleSkeleton days={viewMode === 'today' ? 1 : displayDays.length || 6} rows={5} />
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: viewMode !== 'today' ? '900px' : 'auto' }}>
             <thead>

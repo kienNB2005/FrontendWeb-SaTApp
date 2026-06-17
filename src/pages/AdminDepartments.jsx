@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminDepartments.css';
 
 export default function AdminDepartments() {
@@ -395,16 +396,7 @@ export default function AdminDepartments() {
     </div>
   );
 
-  const renderListLoading = () => (
-    <div className="adp-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse adp-state-icon"
-      />
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={7} columns={8} />;
 
   const renderListError = () => (
     <div className="adp-list-state adp-list-error">

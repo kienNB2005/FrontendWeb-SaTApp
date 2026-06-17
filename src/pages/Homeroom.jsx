@@ -2,6 +2,7 @@ import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
 import '../css/Homeroom.css';
 export default function Homeroom() {
   const { showError } = useError();
@@ -17,6 +18,7 @@ export default function Homeroom() {
 
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
 
   // Hoisted fetch functions
   async function fetchClasses() {
@@ -121,6 +123,7 @@ export default function Homeroom() {
   
 
   const handleExportExcel = async () => {
+    setExportLoading(true);
     try {
       const params = {
         adminClassId: selectedClass,
@@ -147,6 +150,7 @@ export default function Homeroom() {
       showError(error?.response?.data?.message || error?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       showError("Không thể xuất file Excel.");
     }
+    setExportLoading(false);
   };
 
   const handlePrintPdf = () => {
@@ -248,13 +252,15 @@ export default function Homeroom() {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading}>📥 Excel</button>
+          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading || exportLoading}>
+            {exportLoading ? <ButtonSpinner size={12} /> : '📥'} Excel
+          </button>
           <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || loading}>📄 PDF</button>
         </div>
       </div>
 
       {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center', color: 'var(--tx-2)' }}>Đang tải dữ liệu báo cáo...</div>
+        <ReportSkeleton />
       ) : reportData ? (
         <>
           <div className="sg">

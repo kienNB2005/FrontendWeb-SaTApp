@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
+import { ButtonSpinner } from './LoadingStates';
 import logo from "../assets/img/student-attendance-logo.png";
 import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
           BookOpen, Users, UserCog, DoorOpen, Library, Bookmark,
@@ -8,11 +10,16 @@ import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
 export default function Sidebar({ role, isOpen, onClose }) {
   const isAdmin = role === 'admin';
   const navigate = useNavigate();
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   const userName = localStorage.getItem('userName') || (isAdmin ? 'Quản trị viên' : 'Giảng viên');
   const userAvatar = localStorage.getItem('userAvatar');
 
   const handleLogout = async () => {
+    if (logoutLoading) return;
+
+    setLogoutLoading(true);
+
     try {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
@@ -166,9 +173,13 @@ export default function Sidebar({ role, isOpen, onClose }) {
         </div>
       )}
       <div className="sb-foot">
-        <button className="sb-out" onClick={handleLogout}>
-          <LogOut size={16} className="sb-icon" />
-          <span>Đăng xuất</span>
+        <button className="sb-out" onClick={handleLogout} disabled={logoutLoading}>
+          {logoutLoading ? (
+            <ButtonSpinner size={16} className="sb-icon" />
+          ) : (
+            <LogOut size={16} className="sb-icon" />
+          )}
+          <span>{logoutLoading ? '\u0110ang \u0111\u0103ng xu\u1ea5t...' : '\u0110\u0103ng xu\u1ea5t'}</span>
         </button>
       </div>
     </aside>

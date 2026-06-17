@@ -19,6 +19,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { vi } from 'date-fns/locale';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminSemesters.css';
 
 const DEFAULT_CREATE_DATA = {
@@ -253,17 +254,7 @@ export default function AdminSemesters() {
     </div>
   );
 
-  const renderLoading = () => (
-    <div className="asm-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse asm-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderLoading = () => <TableSkeleton rows={7} columns={8} />;
 
   const renderError = () => (
     <div className="asm-list-state asm-list-error">

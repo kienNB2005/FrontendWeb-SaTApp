@@ -1,8 +1,9 @@
-import { useError } from '../contexts/ErrorContext';
+﻿import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';
 import api from '../utils/api';
+import { ButtonSpinner, TableSkeleton } from '../components/LoadingStates';
 
 export default function AdminRequests() {
   const { showError } = useError();
@@ -13,6 +14,8 @@ export default function AdminRequests() {
   const [makeups, setMakeups] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [processingRequestId, setProcessingRequestId] = useState(null);
+  const [rejectLoading, setRejectLoading] = useState(false);
 
   // Reject Modal State
   const [rejectModalId, setRejectModalId] = useState(null);
@@ -41,17 +44,21 @@ export default function AdminRequests() {
 
   const handleApprove = async (id) => {
     if (!(await confirm('Bạn có chắc chắn muốn phê duyệt yêu cầu này? Lịch học sẽ chính thức được cập nhật.'))) return;
+    setProcessingRequestId(id);
     try {
       await api.post(`/api/v1/session-requests/admin/${id}/approve?type=${activeTab}`);
       toast.success('Đã phê duyệt thành công.');
       loadData();
     } catch (err) {
       showError(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
+    } finally {
+      setProcessingRequestId(null);
     }
   };
 
   const submitReject = async () => {
     if (rejectReason.trim().length < 5) return showError("Lý do từ chối quá ngắn.");
+    setRejectLoading(true);
     try {
       await api.post(`/api/v1/session-requests/admin/${rejectModalId}/reject?type=${activeTab}`, {
         rejectReason: rejectReason
@@ -62,6 +69,8 @@ export default function AdminRequests() {
       loadData();
     } catch (err) {
       showError(err?.response?.data?.message || err.message || 'Có lỗi xảy ra.');
+    } finally {
+      setRejectLoading(false);
     }
   };
 
@@ -97,7 +106,7 @@ export default function AdminRequests() {
 
       <div className="card">
         {loading ? (
-          <div className="empty-state">Đang tải...</div>
+          <TableSkeleton rows={7} columns={6} />
         ) : requests.length === 0 ? (
           <div className="empty-state">Không có yêu cầu nào đang chờ duyệt.</div>
         ) : (
@@ -153,10 +162,18 @@ export default function AdminRequests() {
                     </td>
                     <td data-label="Thao tác">
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <button className="btn btn-p btn-sm" onClick={() => handleApprove(req.id)}>
-                          ✅ Duyệt
+                        <button
+                          className="btn btn-p btn-sm"
+                          onClick={() => handleApprove(req.id)}
+                          disabled={processingRequestId === req.id}
+                        >
+                          {processingRequestId === req.id ? <ButtonSpinner size={12} /> : '✅'} Duyệt
                         </button>
-                        <button className="btn btn-d btn-sm" onClick={() => setRejectModalId(req.id)}>
+                        <button
+                          className="btn btn-d btn-sm"
+                          onClick={() => setRejectModalId(req.id)}
+                          disabled={processingRequestId === req.id}
+                        >
                           ❌ Từ chối
                         </button>
                       </div>
@@ -185,8 +202,11 @@ export default function AdminRequests() {
               />
             </div>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button className="btn btn-s" onClick={() => setRejectModalId(null)}>Đóng</button>
-              <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitReject}>Xác nhận Từ chối</button>
+              <button className="btn btn-s" onClick={() => setRejectModalId(null)} disabled={rejectLoading}>Đóng</button>
+              <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitReject} disabled={rejectLoading}>
+                {rejectLoading ? <ButtonSpinner size={14} /> : null}
+                Xác nhận Từ chối
+              </button>
             </div>
           </div>
         </div>

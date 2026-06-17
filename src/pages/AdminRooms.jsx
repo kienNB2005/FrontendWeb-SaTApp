@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminRooms.css';
 
 import { MapContainer, TileLayer, Marker, useMapEvents, Circle } from 'react-leaflet';
@@ -726,17 +727,7 @@ export default function AdminRooms() {
 
   
 
-  const renderListLoading = () => (
-    <div className="arm-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse arm-list-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={7} columns={8} />;
 
   const renderListError = () => (
     <div className="arm-list-state arm-list-error">

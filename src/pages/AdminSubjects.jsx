@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminSubjects.css';
 
 export default function AdminSubjects() {
@@ -549,17 +550,7 @@ export default function AdminSubjects() {
 
   
 
-  const renderListLoading = () => (
-    <div className="asb-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse asb-list-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={7} columns={6} />;
 
   const renderListError = () => (
     <div className="asb-list-state asb-list-error">

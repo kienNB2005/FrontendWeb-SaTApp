@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminTkb.css';
 
 export default function AdminTkb() {
@@ -402,17 +403,7 @@ export default function AdminTkb() {
     </>
   );
 
-  const renderSemestersLoading = () => (
-    <div className="atk-center-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse atk-state-icon"
-      />
-
-      <p>Đang tải thông tin học kỳ...</p>
-    </div>
-  );
+  const renderSemestersLoading = () => <TableSkeleton rows={4} columns={4} />;
 
   const renderNoSemester = () => (
     <div className="card atk-message-card">
@@ -552,17 +543,7 @@ export default function AdminTkb() {
     </div>
   );
 
-  const renderListLoading = () => (
-    <div className="atk-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse atk-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={8} columns={8} />;
 
   const renderListErrorInline = () => (
     <div className="atk-list-state atk-list-error">

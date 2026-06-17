@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminLecturers.css';
 
 const DEFAULT_ADD_FORM = {
@@ -845,17 +846,7 @@ export default function AdminLecturers() {
     </div>
   );
 
-  const renderListLoading = () => (
-    <div className="alc-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse alc-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={8} columns={5} withAvatar />;
 
   const renderListError = () => (
     <div className="alc-list-state alc-list-error">

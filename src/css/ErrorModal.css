@@ -36,7 +36,7 @@
 }
 
 .error-modal-heading {
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: var(--fn-heading);
   font-size: 28px;
   font-weight: 700;
   color: #545454;
@@ -44,7 +44,7 @@
 }
 
 .error-modal-message {
-  font-family: 'Mulish', sans-serif;
+  font-family: var(--fn);
   font-size: 15px;
   color: #545454;
   margin-bottom: 28px;
@@ -57,7 +57,7 @@
   border: none;
   border-radius: 10px;
   padding: 11px 36px;
-  font-family: 'Mulish', sans-serif;
+  font-family: var(--fn);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;

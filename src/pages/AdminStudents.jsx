@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 
 import api from '../utils/api';
+import { TableSkeleton } from '../components/LoadingStates';
 import '../css/AdminStudents.css';
 
 const DEFAULT_ADD_FORM = {
@@ -825,17 +826,7 @@ export default function AdminStudents() {
     </div>
   );
 
-  const renderListLoading = () => (
-    <div className="ast-list-state">
-      <RefreshCw
-        size={32}
-        color="var(--bl)"
-        className="pulse ast-state-icon"
-      />
-
-      <p>Đang tải dữ liệu...</p>
-    </div>
-  );
+  const renderListLoading = () => <TableSkeleton rows={8} columns={5} withAvatar />;
 
   const renderListError = () => (
     <div className="ast-list-state ast-list-error">

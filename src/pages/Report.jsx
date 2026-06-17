@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
+import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
 
 import { useError } from '../contexts/ErrorContext';
 export default function Report() {
@@ -17,6 +18,7 @@ export default function Report() {
 
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
 
   useEffect(() => {
     fetchSemesters();
@@ -127,6 +129,7 @@ export default function Report() {
 
   const handleExportExcel = async () => {
     try {
+      setExportLoading(true);
       const response = await api.get('/api/v1/reports/lecturer/export/excel', {
         params: {
           semesterId: selectedSemester,
@@ -147,6 +150,8 @@ export default function Report() {
       console.error("Lỗi xuất excel", error);
       showError(error?.response?.data?.message || error?.message || "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.");
       showError("Không thể xuất file Excel.");
+    } finally {
+      setExportLoading(false);
     }
   };
 
@@ -256,13 +261,15 @@ export default function Report() {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading}>📥 Excel</button>
+          <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || loading || exportLoading}>
+            {exportLoading ? <ButtonSpinner size={12} /> : '📥'} Excel
+          </button>
           <button className="btn btn-s btn-sm" onClick={handlePrintPdf} disabled={!reportData || loading}>📄 PDF</button>
         </div>
       </div>
 
       {loading ? (
-        <div style={{ padding: '40px', textAlign: 'center', color: 'var(--tx-2)' }}>Đang tải dữ liệu báo cáo...</div>
+        <ReportSkeleton />
       ) : reportData ? (
         <>
           <div className="sg">
