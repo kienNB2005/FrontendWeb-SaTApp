@@ -5,8 +5,8 @@ import { TableSkeleton } from '../components/LoadingStates';
 function StatusBadge({ status }) {
   const s = (status || '').toLowerCase();
   const map = {
-    pending: { label: 'Đang chờ', cls: 'bdg b-am' },
-    approved: { label: 'Đã duyệt', cls: 'bdg b-gr' },
+    pending: { label: 'Đang chờ', cls: 'bdg b-ex' },
+    approved: { label: 'Đã duyệt', cls: 'bdg b-pr' },
     rejected: { label: 'Từ chối', cls: 'bdg b-ca' },
   };
   const { label, cls } = map[s] || { label: status, cls: 'bdg' };

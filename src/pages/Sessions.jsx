@@ -1,5 +1,5 @@
 import { useError } from '../contexts/ErrorContext';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { useConfirm } from '../contexts/ConfirmContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -66,6 +66,8 @@ export default function Sessions() {
   const [selectedClass, setSelectedClass] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingClasses, setLoadingClasses] = useState(true);
+  const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [actionLoading, setActionLoading] = useState(null);
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -131,14 +133,19 @@ export default function Sessions() {
           setSelectedClass(found || list[0]);
         }
       })
-      .catch(() => setError('Không thể tải danh sách lớp.'));
+      .catch(() => setError('Không thể tải danh sách lớp.'))
+      .finally(() => setLoadingClasses(false));
   }, [initClassName]);
 
   // Load môn học khi đổi lớp
   useEffect(() => {
-    if (!selectedClass) return;
-    setSubjects([]);
-    setSelectedSubject(null);
+    if (!selectedClass) {
+      setSubjects([]);
+      setSelectedSubject(null);
+      setLoadingSubjects(false);
+      return;
+    }
+    setLoadingSubjects(true);
     api.get('/api/v1/subjects/filter-by-session', { params: { adminClassId: selectedClass.id } })
       .then(({ data }) => {
         const list = data.result ?? data.data ?? data;
@@ -151,7 +158,8 @@ export default function Sessions() {
           setSelectedSubject(found || list[0]);
         }
       })
-      .catch(() => setError('Không thể tải danh sách môn học.'));
+      .catch(() => setError('Không thể tải danh sách môn học.'))
+      .finally(() => setLoadingSubjects(false));
   }, [selectedClass, initClassName, initSubjectName]);
 
   // Load danh sách buổi học
@@ -173,7 +181,10 @@ export default function Sessions() {
       .finally(() => setLoading(false));
   }, [selectedClass, selectedSubject, retryCount]);
 
-  useEffect(() => { loadSessions(); }, [loadSessions]);
+  useLayoutEffect(() => {
+    if (loadingClasses || loadingSubjects) return;
+    loadSessions();
+  }, [loadSessions, loadingClasses, loadingSubjects]);
 
   // Thống kê tiến độ
   const totalSessions = sessions[0]?.totalSessions ?? sessions.length;
@@ -453,7 +464,7 @@ export default function Sessions() {
 
       {/* Main Table */}
       <div className="card">
-        {loading ? (
+        {loading || loadingClasses || loadingSubjects ? (
           <TableSkeleton rows={8} columns={6} />
         ) : sessions.length === 0 ? (
           <div className="empty-state">Không có buổi học nào được tìm thấy.</div>
