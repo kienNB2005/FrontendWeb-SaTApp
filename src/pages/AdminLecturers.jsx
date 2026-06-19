@@ -814,7 +814,6 @@ export default function AdminLecturers() {
         </div>
       </div>
 
-      {renderListGuide()}
 
       {listLoading && renderListLoading()}
       {!listLoading && listError && renderListError()}
@@ -823,28 +822,6 @@ export default function AdminLecturers() {
     </div>
   );
 
-  const renderListGuide = () => (
-    <div className="alc-guide">
-      <div className="alc-guide-content">
-        <div className="alc-guide-icon">
-          <FileSpreadsheet size={16} color="var(--bl)" />
-        </div>
-
-        <div>
-          <div className="alc-guide-title">Hướng dẫn nhập liệu</div>
-          <div className="alc-guide-desc">
-            Tải file mẫu Excel về, điền dữ liệu theo đúng cột và Upload lên hệ
-            thống.
-          </div>
-        </div>
-      </div>
-
-      <button className="btn btn-s btn-sm alc-btn-icon" onClick={downloadTemplate}>
-        <Download size={14} />
-        Tải file mẫu
-      </button>
-    </div>
-  );
 
   const renderListLoading = () => <TableSkeleton rows={8} columns={5} withAvatar />;
 

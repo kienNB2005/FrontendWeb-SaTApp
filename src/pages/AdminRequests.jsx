@@ -1,4 +1,4 @@
-﻿import { useError } from '../contexts/ErrorContext';
+import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { useConfirm } from '../contexts/ConfirmContext';

@@ -2,6 +2,7 @@ import { useError } from '../contexts/ErrorContext';
 import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { ScheduleSkeleton } from '../components/LoadingStates';
+import { CalendarClock } from 'lucide-react';
 
 export default function Tkb() {
   const { showError } = useError();
@@ -219,10 +220,13 @@ export default function Tkb() {
   return (
     <div className="page active">
       <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '11px', color: 'var(--tx3)', fontWeight: '600' }}>Học kỳ hiện tại</label>
-          <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--tx)' }}>
+        <div>
+          <div className="tb-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
+            <CalendarClock size={24} color="var(--bl)" />
             Thời Khóa Biểu Giảng Viên
+          </div>
+          <div className="tb-sub">
+            Học kỳ hiện tại
           </div>
         </div>
 

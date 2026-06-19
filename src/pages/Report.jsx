@@ -4,6 +4,7 @@ import api from '../utils/api';
 import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
 
 import { useError } from '../contexts/ErrorContext';
+import '../css/AdminReport.css';
 export default function Report() {
   const { showError } = useError();
 
@@ -230,7 +231,17 @@ export default function Report() {
         `}
       </style>
 
-      <div className="hide-on-print" style={{ display: 'flex', gap: '10px', marginBottom: '18px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="adm-bar hide-on-print" style={{ marginBottom: '20px' }}>
+        <div className="adm-ic">📊</div>
+        <div>
+          <div className="ar-title">Báo cáo Lớp giảng dạy</div>
+          <div className="ar-subtitle">
+            Thống kê điểm danh và xuất file báo cáo
+          </div>
+        </div>
+      </div>
+
+      <div className="hide-on-print" style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '24px' }}>
         <select 
           className="fi" 
           style={{ width: '180px' }} 

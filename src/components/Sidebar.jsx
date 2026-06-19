@@ -5,9 +5,9 @@ import { ButtonSpinner } from './LoadingStates';
 import logo from "../assets/img/student-attendance-logo.png";
 import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
           BookOpen, Users, UserCog, DoorOpen, Library, Bookmark,
-          ChartColumn, LogOut, ClipboardCheck, ListTodo, Contact} from "lucide-react";
+          ChartColumn, LogOut, ClipboardCheck, ListTodo, Contact, Menu, X} from "lucide-react";
 
-export default function Sidebar({ role, isOpen, onClose }) {
+export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleCollapse }) {
   const isAdmin = role === 'admin';
   const navigate = useNavigate();
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -39,16 +39,24 @@ export default function Sidebar({ role, isOpen, onClose }) {
   };
 
   return (
-    <aside className={`sb ${isOpen ? 'open' : ''}`}>
+    <aside className={`sb ${isOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
       {/* Logo */}
       <div className="sb-logo">
-        <div className="sb-logo-ic">
-          <img src={logo} alt="Logo" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="sb-logo-ic">
+            <img src={logo} alt="Logo" />
+          </div>
+          <div className="sb-logo-text-wrap">
+            <div className="sb-logo-tx">QRAttend</div>
+            <div className="sb-logo-su">Hệ thống điểm danh QR</div>
+          </div>
         </div>
-        <div>
-          <div className="sb-logo-tx">QRAttend</div>
-          <div className="sb-logo-su">Hệ thống điểm danh QR</div>
-        </div>
+        <button className="desktop-toggle-btn" onClick={toggleCollapse}>
+          <Menu size={20} />
+        </button>
+        <button className="mobile-close-btn" onClick={onClose}>
+          <X size={24} />
+        </button>
       </div>
 
       {/* User info */}

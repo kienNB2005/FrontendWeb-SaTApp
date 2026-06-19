@@ -3,6 +3,7 @@ import { useState, useEffect, useLayoutEffect, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import { ButtonSpinner, ReportSkeleton } from '../components/LoadingStates';
+import '../css/AdminReport.css';
 import '../css/Homeroom.css';
 export default function Homeroom() {
   const { showError } = useError();
@@ -234,7 +235,17 @@ export default function Homeroom() {
         `}
       </style>
 
-      <div className="hide-on-print" style={{ display: 'flex', gap: '10px', marginBottom: '18px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="adm-bar hide-on-print" style={{ marginBottom: '20px' }}>
+        <div className="adm-ic">👥</div>
+        <div>
+          <div className="ar-title">Lớp chủ nhiệm</div>
+          <div className="ar-subtitle">
+            Báo cáo điểm danh và theo dõi lớp chủ nhiệm
+          </div>
+        </div>
+      </div>
+
+      <div className="hide-on-print" style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '24px' }}>
         <select 
           className="fi" 
           style={{ width: '160px' }} 

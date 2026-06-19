@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../utils/api';
 import { ButtonSpinner, TableSkeleton } from '../components/LoadingStates';
+import { Filter } from 'lucide-react';
 
 // Map error codes từ server sang tiếng Việt
 function friendlyError(err) {
@@ -418,38 +419,14 @@ export default function Sessions() {
 
   return (
     <div className="page active">
-      {/* Filters & Stats */}
-      <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '11px', color: 'var(--tx3)', fontWeight: '600' }}>Lớp hành chính</label>
-          <select
-            className="fi" style={{ width: '160px' }}
-            value={selectedClass?.id ?? ''}
-            onChange={(e) => setSelectedClass(classes.find(c => String(c.id) === e.target.value))}
-          >
-            {classes.map((c) => (
-              <option key={c.id} value={c.id}>{c.name} ({c.code})</option>
-            ))}
-          </select>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '11px', color: 'var(--tx3)', fontWeight: '600' }}>Môn học</label>
-          <select
-            className="fi" style={{ width: '200px' }}
-            value={selectedSubject?.id ?? ''}
-            onChange={(e) => setSelectedSubject(subjects.find(s => String(s.id) === e.target.value))}
-          >
-            {subjects.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-          <div style={{ color: 'var(--tx3)', fontSize: '12px' }}>Tiến độ học phần</div>
-          <div style={{ fontWeight: '600', fontSize: '13px' }}>
-            {totalSessions} buổi · <span style={{ color: 'var(--gr)' }}>{doneSessions} đã xong</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+        <div>
+          <div className="tb-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--bl)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Sổ điểm danh
+          </div>
+          <div className="tb-sub">
+            Quản lý danh sách buổi học và điểm danh sinh viên
           </div>
         </div>
       </div>
@@ -464,6 +441,43 @@ export default function Sessions() {
 
       {/* Main Table */}
       <div className="card">
+        <div className="card-h" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+          <div style={{ 
+            display: 'flex', alignItems: 'center', gap: '6px', 
+            padding: '6px 12px', borderRadius: '8px', 
+            border: '1px solid var(--bd)', background: 'var(--bg2)' 
+          }}>
+            <Filter size={14} color="var(--tx3)" />
+            <select
+              className="fi"
+              style={{ width: '160px', border: 'none', background: 'transparent', outline: 'none', padding: '0' }}
+              value={selectedClass?.id ?? ''}
+              onChange={(e) => setSelectedClass(classes.find(c => String(c.id) === e.target.value))}
+            >
+              {classes.map((c) => (
+                <option key={c.id} value={c.id}>{c.name} ({c.code})</option>
+              ))}
+            </select>
+          </div>
+
+          <select
+            className="fi" style={{ width: '200px' }}
+            value={selectedSubject?.id ?? ''}
+            onChange={(e) => setSelectedSubject(subjects.find(s => String(s.id) === e.target.value))}
+          >
+            {subjects.map((s) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+
+          <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+            <div style={{ color: 'var(--tx3)', fontSize: '12px' }}>Tiến độ học phần</div>
+            <div style={{ fontWeight: '600', fontSize: '13px' }}>
+              {totalSessions} buổi · <span style={{ color: 'var(--gr)' }}>{doneSessions} đã xong</span>
+            </div>
+          </div>
+        </div>
+
         {loading || loadingClasses || loadingSubjects ? (
           <TableSkeleton rows={8} columns={6} />
         ) : sessions.length === 0 ? (

@@ -1068,3 +1068,143 @@ select.fi {
   }
 }
 
+/* ── SIDEBAR LOGO & TOGGLE FIX ── */
+.sb-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 14px 14px;
+}
+
+.desktop-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--tx2);
+  cursor: pointer;
+  display: flex;
+}
+
+.mobile-close-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--tx2);
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .desktop-toggle-btn {
+    display: none !important;
+  }
+  .mobile-close-btn {
+    display: flex !important;
+  }
+}
+
+/* ── COLLAPSED SIDEBAR ── */
+@media (min-width: 1025px) {
+  .sb {
+    transition: width 0.3s ease, left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sb.collapsed {
+    width: 72px;
+  }
+
+  .sb.collapsed .sb-logo {
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 0 14px;
+  }
+
+  .sb.collapsed .sb-logo-text-wrap,
+  .sb.collapsed .sb-un,
+  .sb.collapsed .sb-ur,
+  .sb.collapsed .sb-it span,
+  .sb.collapsed .sb-out span {
+    display: none !important;
+  }
+
+  .sb.collapsed .sb-sec {
+    display: none;
+  }
+
+  .sb.collapsed .sb-it {
+    justify-content: center;
+    padding: 8px 0;
+  }
+
+  .sb.collapsed .sb-it .sb-icon {
+    margin: 0;
+  }
+
+  .sb.collapsed .sb-out {
+    padding: 7px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sb.collapsed .sb-user {
+    justify-content: center;
+    padding: 10px 0;
+  }
+}
+
+/* ── MOBILE ADMIN HEADER ── */
+.mobile-topbar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 54px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--bd);
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.mobile-admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-admin-logo img {
+  height: 28px;
+}
+
+@media (max-width: 1024px) {
+  .mobile-topbar {
+    display: flex;
+  }
+}
+
+/* ── INLINE PAGE HEADER ── */
+.page-header-clean {
+  padding: 20px 24px 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ph-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--tx1);
+  margin: 0;
+}
+
+.ph-sub {
+  font-size: 14px;
+  color: var(--tx3);
+}
+
+@media (max-width: 768px) {
+  .page-header-clean {
+    padding: 20px 16px 16px;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
