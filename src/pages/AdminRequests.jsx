@@ -78,12 +78,12 @@ export default function AdminRequests() {
 
   return (
     <div className="page active">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="admin-requests-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2 style={{ margin: 0, fontSize: '20px' }}>Phê duyệt yêu cầu giảng dạy</h2>
         <button className="btn btn-s btn-sm" onClick={loadData}>🔄 Làm mới</button>
       </div>
 
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--bd2)', paddingBottom: '10px' }}>
+      <div className="admin-request-tabs" style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '1px solid var(--bd2)', paddingBottom: '10px' }}>
         <button 
           className={`btn ${activeTab === 'cancel' ? 'btn-p' : 'btn-s'}`}
           onClick={() => setActiveTab('cancel')}
@@ -110,6 +110,7 @@ export default function AdminRequests() {
         ) : requests.length === 0 ? (
           <div className="empty-state">Không có yêu cầu nào đang chờ duyệt.</div>
         ) : (
+          <div className="ast-table-wrap">
           <table className="ast-responsive-table">
             <thead>
               <tr>
@@ -183,13 +184,14 @@ export default function AdminRequests() {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
       {/* Modal Từ chối */}
       {rejectModalId && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: 'var(--bg)', padding: '24px', borderRadius: '12px', width: '400px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+        <div className="app-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="app-modal-card" style={{ background: 'var(--bg)', padding: '24px', borderRadius: '12px', width: '400px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
             <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Từ chối yêu cầu</h3>
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', fontWeight: 600 }}>Lý do từ chối (bắt buộc)</label>
@@ -201,7 +203,7 @@ export default function AdminRequests() {
                 onChange={e => setRejectReason(e.target.value)}
               />
             </div>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+            <div className="app-modal-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button className="btn btn-s" onClick={() => setRejectModalId(null)} disabled={rejectLoading}>Đóng</button>
               <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitReject} disabled={rejectLoading}>
                 {rejectLoading ? <ButtonSpinner size={14} /> : null}

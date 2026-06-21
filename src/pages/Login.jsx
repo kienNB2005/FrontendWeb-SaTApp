@@ -291,7 +291,7 @@ export default function Login() {
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', minHeight: '44px' }}>
                 <div id="g_id_signin" style={{ display: gsiReady ? 'block' : 'none' }}></div>
                 {!gsiReady && (
-                  <div style={{ width: 300, display: 'flex', alignItems: 'center' }}>
+                  <div className="login-google-skeleton" style={{ width: 300, display: 'flex', alignItems: 'center' }}>
                     <SkeletonLine width="100%" height={42} radius={6} />
                   </div>
                 )}

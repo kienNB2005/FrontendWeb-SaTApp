@@ -1072,13 +1072,3 @@
 .pulse-dot {
   animation: pulse 2s infinite;
 }
-
-@media (max-width: 900px) {
-  .qr-body {
-    grid-template-columns: 1fr;
-  }
-
-  .att-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}

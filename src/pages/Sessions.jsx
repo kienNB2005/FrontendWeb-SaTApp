@@ -419,7 +419,7 @@ export default function Sessions() {
 
   return (
     <div className="page active">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
+      <div className="mobile-page-heading" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <div className="tb-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--bl)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
@@ -441,8 +441,8 @@ export default function Sessions() {
 
       {/* Main Table */}
       <div className="card">
-        <div className="card-h" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
-          <div style={{ 
+        <div className="card-h sessions-filter-bar" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', width: '100%' }}>
+          <div className="sessions-class-filter" style={{
             display: 'flex', alignItems: 'center', gap: '6px', 
             padding: '6px 12px', borderRadius: '8px', 
             border: '1px solid var(--bd)', background: 'var(--bg2)' 
@@ -461,7 +461,7 @@ export default function Sessions() {
           </div>
 
           <select
-            className="fi" style={{ width: '200px' }}
+            className="fi sessions-subject-filter" style={{ width: '200px' }}
             value={selectedSubject?.id ?? ''}
             onChange={(e) => setSelectedSubject(subjects.find(s => String(s.id) === e.target.value))}
           >
@@ -470,7 +470,7 @@ export default function Sessions() {
             ))}
           </select>
 
-          <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+          <div className="sessions-filter-progress" style={{ marginLeft: 'auto', textAlign: 'right' }}>
             <div style={{ color: 'var(--tx3)', fontSize: '12px' }}>Tiến độ học phần</div>
             <div style={{ fontWeight: '600', fontSize: '13px' }}>
               {totalSessions} buổi · <span style={{ color: 'var(--gr)' }}>{doneSessions} đã xong</span>
@@ -527,7 +527,7 @@ export default function Sessions() {
                         {isUpcoming ? '—' : (s.lateCount ?? 0)}
                       </td>
                       <td data-label="Trạng thái"><StatusBadge status={s.status} /></td>
-                      <td className="ast-action-cell" style={{ width: '210px', minWidth: '210px' }}>{renderActions(s)}</td>
+                      <td data-label="Hành động" className="ast-action-cell" style={{ width: '210px', minWidth: '210px' }}>{renderActions(s)}</td>
                     </tr>
                   );
                 })}
@@ -539,8 +539,8 @@ export default function Sessions() {
 
       {/* Modal Hủy Buổi Học */}
       {cancelModalSessionId && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: 'var(--bg)', padding: '24px', borderRadius: '12px', width: '400px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+        <div className="app-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="app-modal-card" style={{ background: 'var(--bg)', padding: '24px', borderRadius: '12px', width: '400px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
             <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Hủy buổi học</h3>
             <div style={{ marginBottom: '16px' }}>
               <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', fontWeight: 600 }}>Lý do hủy (bắt buộc)</label>
@@ -552,7 +552,7 @@ export default function Sessions() {
                 onChange={e => setCancelReason(e.target.value)}
               />
             </div>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+            <div className="app-modal-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button className="btn btn-s" onClick={() => setCancelModalSessionId(null)} disabled={cancelSubmitting}>Đóng</button>
               <button className="btn btn-p" style={{ background: '#ef4444', color: '#fff', border: 'none' }} onClick={submitCancel} disabled={cancelSubmitting}>
                 {cancelSubmitting ? <ButtonSpinner size={14} /> : null}
@@ -565,8 +565,8 @@ export default function Sessions() {
 
       {/* Modal Dạy Bù */}
       {makeupModalSessionId && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ 
+        <div className="app-modal-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div className="app-modal-card" style={{
             background: 'var(--bg2)', 
             padding: '24px', 
             borderRadius: '12px', 
@@ -594,9 +594,9 @@ export default function Sessions() {
               </button> */}
             </div>
 
-            <div style={{ display: 'flex', gap: '24px', flex: 1, overflow: 'hidden' }}>
+            <div className="session-modal-body" style={{ display: 'flex', gap: '24px', flex: 1, overflow: 'hidden' }}>
               {/* Cột trái: Form nhập tay */}
-              <div style={{ width: '352px', display: 'flex', flexDirection: 'column', gap: '16px', flexShrink: 0 }}>
+              <div className="session-makeup-form" style={{ width: '352px', display: 'flex', flexDirection: 'column', gap: '16px', flexShrink: 0 }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '13px', marginBottom: '6px', fontWeight: 600 }}>Ngày dạy bù</label>
                   <input 
@@ -641,7 +641,7 @@ export default function Sessions() {
                   </select>
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: 'auto', paddingTop: '16px' }}>
+                <div className="app-modal-actions" style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: 'auto', paddingTop: '16px' }}>
                   <button className="btn btn-s" onClick={() => setMakeupModalSessionId(null)} disabled={makeupSubmitting}>Đóng</button>
                   <button className="btn btn-p" onClick={submitMakeup} disabled={makeupSubmitting}>
                     {makeupSubmitting ? <ButtonSpinner size={14} /> : null}

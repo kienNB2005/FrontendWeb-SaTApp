@@ -371,7 +371,7 @@ export default function Homeroom() {
             </div>
 
             <div className="ast-table-wrap">
-              <table className="ast-responsive-table">
+              <table className="ast-responsive-table mobile-data-table">
                 <thead>
                   <tr>
                     <th style={{ width: '40px' }}>STT</th>

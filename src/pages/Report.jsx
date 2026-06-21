@@ -241,7 +241,7 @@ export default function Report() {
         </div>
       </div>
 
-      <div className="hide-on-print" style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '24px' }}>
+      <div className="hide-on-print report-toolbar" style={{ display: 'flex', gap: '10px', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '24px' }}>
         <select 
           className="fi" 
           style={{ width: '180px' }} 
@@ -315,7 +315,7 @@ export default function Report() {
           <span style={{ fontSize: '14px', color: 'var(--tx-2)' }}>%</span>
         </div>
 
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
+        <div className="report-export-actions" style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
           <button className="btn btn-s btn-sm" onClick={handleExportExcel} disabled={!reportData || filtersLoading || loading || exportLoading}>
             {exportLoading ? <ButtonSpinner size={12} /> : '📥'} Excel
           </button>
@@ -367,7 +367,7 @@ export default function Report() {
             </div>
 
           <div className="ast-table-wrap">
-            <table className="ast-responsive-table">
+            <table className="ast-responsive-table mobile-data-table">
               <thead>
                 <tr>
                   <th style={{ width: '40px' }}>STT</th>

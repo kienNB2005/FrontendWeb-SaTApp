@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Sidebar from './Sidebar';
@@ -37,6 +37,7 @@ function getPageInfo(pathname) {
 
 export default function Layout() {
   const location = useLocation();
+  const menuButtonRef = useRef(null);
   const [role, setRole] = useState('gv');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -49,6 +50,27 @@ export default function Layout() {
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isSidebarOpen || !window.matchMedia('(max-width: 1024px)').matches) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsSidebarOpen(false);
+        requestAnimationFrame(() => menuButtonRef.current?.focus());
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isSidebarOpen]);
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -82,14 +104,26 @@ export default function Layout() {
       />
       
       {/* Mobile Sidebar Overlay */}
-      <div 
+      <button
+        type="button"
+        aria-label="Đóng menu điều hướng"
+        aria-hidden={!isSidebarOpen}
+        tabIndex={isSidebarOpen ? 0 : -1}
         className={`sb-overlay ${isSidebarOpen ? 'open' : ''}`} 
         onClick={() => setIsSidebarOpen(false)}
-      ></div>
+      />
 
       <div className="main">
         <div className="mobile-topbar">
-          <button className="topbar-menu-btn" onClick={() => setIsSidebarOpen(true)}>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="topbar-menu-btn"
+            aria-label="Mở menu điều hướng"
+            aria-controls="app-sidebar"
+            aria-expanded={isSidebarOpen}
+            onClick={() => setIsSidebarOpen(true)}
+          >
             <Menu size={20} />
           </button>
           <div className="mobile-admin-logo">

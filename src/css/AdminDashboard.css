@@ -378,9 +378,3 @@
 .admin-stats-grid {
   grid-template-columns: repeat(3, 1fr) !important;
 }
-
-@media (max-width: 768px) {
-  .admin-stats-grid {
-    grid-template-columns: 1fr !important;
-  }
-}

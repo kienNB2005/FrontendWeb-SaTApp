@@ -563,39 +563,3 @@
 /* =========================
    Responsive Tweaks
    ========================= */
-@media (max-width: 768px) {
-  .atk-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .atk-header-actions {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .atk-semester-select {
-    width: 100%;
-  }
-
-  .card-h {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .atk-filter-actions {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .atk-filter-actions .srch,
-  .atk-day-select {
-    width: 100%;
-  }
-
-  .atk-filter-actions .srch input {
-    width: 100%;
-  }
-}

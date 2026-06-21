@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import { ButtonSpinner } from './LoadingStates';
@@ -10,7 +10,17 @@ import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
 export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleCollapse }) {
   const isAdmin = role === 'admin';
   const navigate = useNavigate();
+  const closeButtonRef = useRef(null);
   const [logoutLoading, setLogoutLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && window.matchMedia('(max-width: 1024px)').matches) {
+      const focusTimer = window.setTimeout(() => closeButtonRef.current?.focus(), 320);
+      return () => window.clearTimeout(focusTimer);
+    }
+
+    return undefined;
+  }, [isOpen]);
 
   const userName = localStorage.getItem('userName') || (isAdmin ? 'Quản trị viên' : 'Giảng viên');
   const userAvatar = localStorage.getItem('userAvatar');
@@ -39,7 +49,7 @@ export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleColl
   };
 
   return (
-    <aside className={`sb ${isOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
+    <aside id="app-sidebar" className={`sb ${isOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
       {/* Logo */}
       <div className="sb-logo">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -48,13 +58,18 @@ export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleColl
           </div>
           <div className="sb-logo-text-wrap">
             <div className="sb-logo-tx">QRAttend</div>
-            <div className="sb-logo-su">Hệ thống điểm danh QR</div>
           </div>
         </div>
-        <button className="desktop-toggle-btn" onClick={toggleCollapse}>
+        <button
+          type="button"
+          className="desktop-toggle-btn"
+          aria-label={isCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
+          title={isCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
+          onClick={toggleCollapse}
+        >
           <Menu size={20} />
         </button>
-        <button className="mobile-close-btn" onClick={onClose}>
+        <button ref={closeButtonRef} type="button" className="mobile-close-btn" aria-label="Đóng menu điều hướng" onClick={onClose}>
           <X size={24} />
         </button>
       </div>

@@ -270,7 +270,7 @@ function ReportTable({ rows, loading, searchInput, setSearchInput, handleSearch 
       </div>
 
       <div className="tbl-wrapper">
-        <table className="ast-responsive-table">
+        <table className="ast-responsive-table mobile-data-table">
           <thead>
             <tr>
               <th>Tên Lớp</th>

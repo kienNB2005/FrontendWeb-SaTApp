@@ -219,7 +219,7 @@ export default function Tkb() {
 
   return (
     <div className="page active">
-      <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div className="tkb-page-header" style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
         <div>
           <div className="tb-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
             <CalendarClock size={24} color="var(--bl)" />
@@ -231,7 +231,7 @@ export default function Tkb() {
         </div>
 
         {/* View Toggle */}
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginLeft: 'auto' }}>
+        <div className="tkb-view-controls" style={{ display: 'flex', gap: '10px', alignItems: 'center', marginLeft: 'auto' }}>
           {viewMode === 'week' && (
             <select 
               value={selectedWeek} 
@@ -242,18 +242,18 @@ export default function Tkb() {
             </select>
           )}
 
-          <div style={{ display: 'flex', background: 'var(--bg3)', padding: '4px', borderRadius: '8px', border: '1px solid var(--bd)' }}>
+          <div className="tkb-view-toggle" style={{ display: 'flex', background: 'var(--bg3)', padding: '4px', borderRadius: '8px', border: '1px solid var(--bd)' }}>
             <button style={{ padding: '8px 24px', borderRadius: '6px', border: 'none', background: viewMode === 'today' ? 'var(--bg)' : 'transparent', color: viewMode === 'today' ? 'var(--tx)' : 'var(--tx3)', fontWeight: '600', fontSize: '13px', cursor: 'pointer', boxShadow: viewMode === 'today' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: '0.2s' }} onClick={() => setViewMode('today')}>Hôm nay</button>
             <button style={{ padding: '8px 24px', borderRadius: '6px', border: 'none', background: viewMode === 'week' ? 'var(--bg)' : 'transparent', color: viewMode === 'week' ? 'var(--tx)' : 'var(--tx3)', fontWeight: '600', fontSize: '13px', cursor: 'pointer', boxShadow: viewMode === 'week' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', transition: '0.2s' }} onClick={() => setViewMode('week')}>Lịch theo tuần</button>
           </div>
         </div>
       </div>
 
-      <div className="card" style={{ padding: '0', overflowX: 'auto', borderRadius: '12px', minHeight: '400px', position: 'relative' }}>
+      <div className="card tkb-table-card" style={{ padding: '0', overflowX: 'auto', borderRadius: '12px', minHeight: '400px', position: 'relative' }}>
         {loading ? (
           <ScheduleSkeleton days={viewMode === 'today' ? 1 : displayDays.length || 6} rows={5} />
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: viewMode !== 'today' ? '900px' : 'auto' }}>
+          <table className="tkb-table" style={{ width: '100%', borderCollapse: 'collapse', minWidth: viewMode !== 'today' ? '900px' : 'auto' }}>
             <thead>
               <tr style={{ background: 'var(--bg3)' }}>
                 <th style={{ padding: '16px 12px', borderBottom: '1px solid var(--bd)', textAlign: 'left', width: '140px', whiteSpace: 'nowrap', color: 'var(--tx3)', fontSize: '12px', fontWeight: '600' }}>Ca học</th>

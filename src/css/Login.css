@@ -353,37 +353,3 @@
 @keyframes fadeDown { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── RESPONSIVE ── */
-
-/* Mobile: màn hình không đủ rộng cho 2 cột */
-@media (max-width: 768px) {
-  .login-page-wrapper .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 20px 36px;
-    gap: 28px;
-  }
-
-  .login-page-wrapper .hero {
-    padding-right: 0;
-    text-align: center;
-    max-width: 480px;
-  }
-  .login-page-wrapper .hero-tag { margin: 0 auto 18px; }
-  .login-page-wrapper .hero-title { font-size: 36px; line-height: 1.1; }
-  .login-page-wrapper .hero-desc { margin: 0 auto 28px; font-size: 14px; }
-
-  /* Ẩn Laptop mockup */
-  .login-page-wrapper .laptop { display: none; }
-  .login-page-wrapper .phone-row { margin-bottom: 0; }
-
-  .login-page-wrapper .form-col { max-width: 400px; }
-  .login-page-wrapper .form-card { padding: 28px 22px; border-radius: 20px; margin: 0 auto; }
-  .login-page-wrapper .rc-title { font-size: 24px; }
-  .login-page-wrapper .rc-desc { font-size: 13px; margin-bottom: 24px; }
-  .login-page-wrapper .divider span { font-size: 10px; }
-  .login-page-wrapper .trust-row { padding: 10px 12px; gap: 9px; }
-  .login-page-wrapper .tr-text { font-size: 11.5px; }
-
-  .login-page-wrapper .footer { font-size: 11px; padding: 0 20px 22px; }
-}

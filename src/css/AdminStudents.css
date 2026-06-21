@@ -488,72 +488,6 @@
   border-bottom: none;
 }
 
-@media (max-width: 1024px) {
-  .ast-table-wrap {
-    border: none;
-    background: transparent;
-    overflow: visible;
-  }
-  
-  .ast-responsive-table, 
-  .ast-responsive-table thead, 
-  .ast-responsive-table tbody, 
-  .ast-responsive-table th, 
-  .ast-responsive-table td, 
-  .ast-responsive-table tr { 
-    display: block; 
-  }
-  
-  /* Hide table headers (accessible way) */
-  .ast-responsive-table thead tr { 
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  
-  .ast-responsive-table tr { 
-    margin-bottom: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--bd);
-    background: var(--bg2);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    padding: 12px 20px;
-  }
-
-  .ast-responsive-table td { 
-    border: none;
-    position: relative;
-    padding: 12px 0 12px 100px !important;
-    display: flex;
-    align-items: center;
-    min-height: 48px;
-  }
-  
-  .ast-responsive-table td:not(:last-child) {
-    border-bottom: 1px solid var(--bd) !important;
-  }
-  
-  .ast-responsive-table td:last-child {
-    border-bottom: 0 !important;
-    padding-left: 0 !important;
-    justify-content: flex-end;
-    margin-top: 8px;
-    padding-top: 12px !important;
-    border-top: 1px dashed var(--bd);
-  }
-
-  .ast-responsive-table td::before { 
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 90px;
-    font-weight: 600;
-    color: var(--tx3);
-    font-size: 12px;
-    white-space: nowrap;
-  }
-}
-
 .ast-col-index {
   color: var(--tx3);
   font-size: 12px;
@@ -624,6 +558,19 @@
 .ast-col-action {
   text-align: right;
   width: 80px;
+}
+
+.ast-action-cell {
+  width: 56px;
+  text-align: right;
+}
+
+.ast-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
 }
 
 /* =========================

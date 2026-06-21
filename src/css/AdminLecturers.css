@@ -509,7 +509,16 @@
 }
 
 .alc-action-cell {
+  width: 56px;
   text-align: right;
+}
+
+.alc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
 }
 
 /* =========================
@@ -707,70 +716,4 @@
 
 .alc-responsive-table tbody tr:last-child td {
   border-bottom: none;
-}
-
-@media (max-width: 1024px) {
-  .alc-table-wrap {
-    border: none;
-    background: transparent;
-    overflow: visible;
-  }
-  
-  .alc-responsive-table, 
-  .alc-responsive-table thead, 
-  .alc-responsive-table tbody, 
-  .alc-responsive-table th, 
-  .alc-responsive-table td, 
-  .alc-responsive-table tr { 
-    display: block; 
-  }
-  
-  /* Hide table headers */
-  .alc-responsive-table thead tr { 
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  
-  .alc-responsive-table tr { 
-    margin-bottom: 16px;
-    border-radius: 12px;
-    border: 1px solid var(--bd);
-    background: var(--bg2);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    padding: 12px 20px;
-  }
-
-  .alc-responsive-table td { 
-    border: none;
-    position: relative;
-    padding: 12px 0 12px 100px !important;
-    display: flex;
-    align-items: center;
-    min-height: 48px;
-  }
-  
-  .alc-responsive-table td:not(:last-child) {
-    border-bottom: 1px solid var(--bd) !important;
-  }
-  
-  .alc-responsive-table td:last-child {
-    border-bottom: 0 !important;
-    padding-left: 0 !important;
-    justify-content: flex-end;
-    margin-top: 8px;
-    padding-top: 12px !important;
-    border-top: 1px dashed var(--bd);
-  }
-
-  .alc-responsive-table td::before { 
-    content: attr(data-label);
-    position: absolute;
-    left: 0;
-    width: 90px;
-    font-weight: 600;
-    color: var(--tx3);
-    font-size: 12px;
-    white-space: nowrap;
-  }
 }

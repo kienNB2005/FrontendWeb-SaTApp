@@ -1,6 +1,5 @@
 import { useError } from '../contexts/ErrorContext';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import toast from 'react-hot-toast';
 import {
   UploadCloud,
   FileSpreadsheet,
@@ -15,6 +14,7 @@ import {
   Filter,
   ChevronLeft,
   ChevronRight,
+  Edit,
   X,
 } from 'lucide-react';
 
@@ -924,10 +924,13 @@ export default function AdminLecturers() {
 
                 <td className="alc-action-cell" data-label="">
                   <button
-                    className="btn btn-s btn-sm"
+                    type="button"
+                    className="btn btn-s alc-icon-btn"
+                    title="Sửa"
+                    aria-label={`Sửa giảng viên ${lecturer.fullName || lecturer.lecturerCode}`}
                     onClick={() => handleEditClick(lecturer)}
                   >
-                    Sửa
+                    <Edit size={14} color="var(--bl)" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
