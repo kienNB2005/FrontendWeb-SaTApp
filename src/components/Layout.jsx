@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Sidebar from './Sidebar';
 import { Menu } from 'lucide-react';
@@ -92,11 +92,13 @@ export default function Layout() {
   }, []);
 
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const overviewPath = role === 'admin' || isAdminRoute ? '/admin' : '/';
 
   return (
     <div className="layout">
       <Sidebar 
         role={role} 
+        overviewPath={overviewPath}
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
         isCollapsed={isSidebarCollapsed}
@@ -126,10 +128,10 @@ export default function Layout() {
           >
             <Menu size={20} />
           </button>
-          <div className="mobile-admin-logo">
+          <Link to={overviewPath} className="mobile-admin-logo" aria-label="Đi đến trang tổng quan">
             <img src={logo} alt="Logo" />
             <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '18px' }}>QRAttend</span>
-          </div>
+          </Link>
           <div style={{ width: 40 }}></div>
         </div>
 

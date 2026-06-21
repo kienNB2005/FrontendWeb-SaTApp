@@ -36,6 +36,20 @@
   margin-left: auto;
 }
 
+.ast-table-wrap.report-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+.ast-table-wrap.report-table-scroll:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* =========================
    Table
    ========================= */

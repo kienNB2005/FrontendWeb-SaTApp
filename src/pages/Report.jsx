@@ -366,7 +366,12 @@ export default function Report() {
               </div>
             </div>
 
-          <div className="ast-table-wrap">
+          <div
+            className="ast-table-wrap report-table-scroll"
+            role="region"
+            aria-label="Bảng báo cáo lớp giảng dạy"
+            tabIndex="0"
+          >
             <table className="ast-responsive-table mobile-data-table">
               <thead>
                 <tr>

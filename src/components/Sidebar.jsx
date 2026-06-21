@@ -7,7 +7,7 @@ import { LayoutDashboard, GraduationCap, CalendarDays ,SquareCheckBig,
           BookOpen, Users, UserCog, DoorOpen, Library, Bookmark,
           ChartColumn, LogOut, ClipboardCheck, ListTodo, Contact, Menu, X} from "lucide-react";
 
-export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleCollapse }) {
+export default function Sidebar({ role, overviewPath, isOpen, onClose, isCollapsed, toggleCollapse }) {
   const isAdmin = role === 'admin';
   const navigate = useNavigate();
   const closeButtonRef = useRef(null);
@@ -52,14 +52,19 @@ export default function Sidebar({ role, isOpen, onClose, isCollapsed, toggleColl
     <aside id="app-sidebar" className={`sb ${isOpen ? 'open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
       {/* Logo */}
       <div className="sb-logo">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <NavLink
+          to={overviewPath}
+          className="sb-logo-link"
+          aria-label="Đi đến trang tổng quan"
+          onClick={onClose}
+        >
           <div className="sb-logo-ic">
             <img src={logo} alt="Logo" />
           </div>
           <div className="sb-logo-text-wrap">
             <div className="sb-logo-tx">QRAttend</div>
           </div>
-        </div>
+        </NavLink>
         <button
           type="button"
           className="desktop-toggle-btn"

@@ -103,6 +103,21 @@ body {
   gap: 10px;
 }
 
+.sb-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 9px;
+}
+
+.sb-logo-link:focus-visible,
+.mobile-admin-logo:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
 .sb-logo-ic {
   width: 40px;
   height: 40px;
@@ -974,6 +989,9 @@ select.fi {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 9px;
 }
 
 .mobile-admin-logo img {

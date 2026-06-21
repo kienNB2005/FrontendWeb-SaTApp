@@ -314,6 +314,29 @@
 }
 .login-page-wrapper .divider span { font-size: 10.5px; color: var(--text-hint); letter-spacing: .04em; white-space: nowrap; }
 
+.login-page-wrapper .login-google-slot {
+  min-height: 44px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-page-wrapper .login-submit-loading {
+  width: 300px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid rgba(41, 121, 255, .28);
+  border-radius: 6px;
+  background: var(--blue-pale);
+  color: var(--blue-mid);
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .login-page-wrapper .trust-row {
   margin-top: 18px; display: flex; align-items: center; gap: 11px; padding: 12px 14px;
   background: rgba(41,121,255,.05); border-radius: 12px; border: 1px solid rgba(41,121,255,.11);

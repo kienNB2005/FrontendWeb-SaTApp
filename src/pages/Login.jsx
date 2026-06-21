@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import '../css/Login.css';
 import { useError } from '../contexts/ErrorContext';
-import { SkeletonLine } from '../components/LoadingStates';
+import { ButtonSpinner, SkeletonLine } from '../components/LoadingStates';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -11,8 +11,9 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 export default function Login() {
   const navigate = useNavigate();
   const { showError } = useError();
-  const [email, setEmail] = useState('');
   const [gsiReady, setGsiReady] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const loginInFlightRef = useRef(false);
 
   // Nếu user đã đăng nhập, tự redirect về trang phù hợp
   useEffect(() => {
@@ -62,11 +63,15 @@ export default function Login() {
 
   const handleCredentialResponse = useCallback(
     async (response) => {
+      if (loginInFlightRef.current) return;
+
+      loginInFlightRef.current = true;
+      setLoginLoading(true);
+
       try {
         let payload;
         try {
           payload = jwtDecode(response.credential);
-          setEmail(payload.email || 'Google user');
 
           if (payload.name) {
             localStorage.setItem('userName', payload.name);
@@ -75,7 +80,6 @@ export default function Login() {
             localStorage.setItem('userAvatar', payload.picture);
           }
         } catch {
-          setEmail('Google user');
           throw new Error('Tài khoản Google không hợp lệ.');
         }
 
@@ -146,6 +150,9 @@ export default function Login() {
         navigate(isAdmin ? '/admin' : '/');
       } catch (error) {
         showError(error.message || "Lỗi kết nối tới máy chủ.");
+      } finally {
+        loginInFlightRef.current = false;
+        setLoginLoading(false);
       }
     },
     [navigate, showError]
@@ -288,11 +295,17 @@ export default function Login() {
                 <span>Tiếp tục với tài khoản tổ chức</span>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', minHeight: '44px' }}>
-                <div id="g_id_signin" style={{ display: gsiReady ? 'block' : 'none' }}></div>
-                {!gsiReady && (
+              <div className="login-google-slot" aria-live="polite" aria-busy={loginLoading}>
+                <div id="g_id_signin" style={{ display: gsiReady && !loginLoading ? 'block' : 'none' }}></div>
+                {!gsiReady && !loginLoading && (
                   <div className="login-google-skeleton" style={{ width: 300, display: 'flex', alignItems: 'center' }}>
                     <SkeletonLine width="100%" height={42} radius={6} />
+                  </div>
+                )}
+                {loginLoading && (
+                  <div className="login-submit-loading" role="status">
+                    <ButtonSpinner size={18} />
+                    <span>Đang đăng nhập...</span>
                   </div>
                 )}
               </div>
@@ -314,9 +327,9 @@ export default function Login() {
               </div>
 
               <p className="terms">
-                Bằng cách đăng nhập, bạn đồng ý với <br/>
+                {/* Bằng cách đăng nhập, bạn đồng ý với <br/>
                 <a href="#">Chính sách bảo mật</a> và
-                <a href="#"> Quy định sử dụng</a>.
+                <a href="#"> Quy định sử dụng</a>. */}
               </p>
             </div>
           </div>

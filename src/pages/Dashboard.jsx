@@ -123,12 +123,6 @@ export default function Dashboard() {
 
   return (
     <div className="page active">
-      <DashboardHeader
-        semesters={semesters}
-        selectedSemesterId={selectedSemesterId}
-        setSelectedSemesterId={setSelectedSemesterId}
-      />
-
       {error && (
         <ErrorBanner
           error={error}
@@ -155,22 +149,6 @@ export default function Dashboard() {
 
         <div>
           <WeekSchedule sessions={weekSessions} loading={loading} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DashboardHeader({ semesters, selectedSemesterId, setSelectedSemesterId }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
-      <div>
-        <div className="tb-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '20px' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--bl)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-          Tổng quan Giảng dạy
-        </div>
-        <div className="tb-sub">
-          Theo dõi tiến độ và các buổi học trong ngày
         </div>
       </div>
     </div>
