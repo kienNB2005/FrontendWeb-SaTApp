@@ -14,6 +14,7 @@ import {
   RefreshCw,
   Search,
   Calendar,
+  Trash2,
 } from 'lucide-react';
 
 import api from '../utils/api';
@@ -146,6 +147,22 @@ export default function AdminTkb() {
     }
   };
 
+  const handleDeleteAllSchedules = async () => {
+    if (!selectedSemester) return;
+    
+    if (!window.confirm('CẢNH BÁO NGUY HIỂM!\n\nBạn có chắc chắn muốn XÓA TOÀN BỘ Thời khóa biểu của học kỳ này không?\nHành động này không thể hoàn tác.')) {
+      return;
+    }
+
+    try {
+      await api.delete(`/api/v1/schedules/semester/${selectedSemester}`);
+      toast.success('Đã xóa toàn bộ thời khóa biểu của học kỳ');
+      fetchSchedules(0);
+    } catch (err) {
+      showError(err.response?.data?.message || 'Không thể xóa thời khóa biểu. Vui lòng thử lại sau.');
+    }
+  };
+
   const handleImportClick = () => {
     fileInputRef.current?.click();
   };
@@ -181,7 +198,7 @@ export default function AdminTkb() {
         setStatusText('Đang ánh xạ mã lớp, môn, giảng viên...');
       }, 500);
 
-      const res = await api.post('/api/v1/schedules/import/preview', formData, {
+      const res = await api.post(`/api/v1/schedules/import/preview?semesterId=${selectedSemester}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -346,6 +363,31 @@ export default function AdminTkb() {
               <RefreshCw size={14} />
               Làm mới
             </button>
+
+            {schedules.length > 0 && !searchText && !filterDay && !listLoading && selectedSemester && (
+              (() => {
+                const selected = semesters.find(s => s.id.toString() === selectedSemester);
+                if (!selected) return null;
+                
+                const isActive = selected.isActive;
+                // Coi học kỳ là tương lai nếu ngày bắt đầu lớn hơn hiện tại
+                const isFuture = new Date(selected.startDate) > new Date();
+
+                // Nút Xóa chỉ hiện nếu KHÔNG ĐANG HOẠT ĐỘNG và LÀ HỌC KỲ TƯƠNG LAI
+                if (!isActive && isFuture) {
+                  return (
+                    <button
+                      className="btn btn-s atk-btn-icon atk-text-red"
+                      onClick={handleDeleteAllSchedules}
+                    >
+                      <Trash2 size={14} />
+                      Xóa toàn bộ TKB
+                    </button>
+                  );
+                }
+                return null;
+              })()
+            )}
 
             {schedules.length === 0 && !searchText && !filterDay && !listLoading && (
               <button

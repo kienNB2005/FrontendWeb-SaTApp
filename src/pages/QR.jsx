@@ -888,8 +888,8 @@ function CheckoutModal({
         </div>
 
         <div className="mo-warn">
-          ⚠️ SV không quét trong {checkoutMins} phút →{' '}
-          <strong>left_early = true</strong>. Trạng thái vẫn là "Có mặt".
+          ⚠️ SV không quét trong {checkoutMins} phút sẽ bị đánh dấu{' '}
+          <strong>Về sớm</strong>
         </div>
 
         <div className="mo-field">
