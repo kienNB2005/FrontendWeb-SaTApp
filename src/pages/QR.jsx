@@ -121,13 +121,20 @@ export default function QR() {
         setSessionClosed(true);
       }
 
-      if (detail.status === 'open' && detail.qrCodeData) {
-        setQrData(detail.qrCodeData);
-        setQrType(detail.qrType ?? 'CHECK_IN');
-        startTimer(detail.qrExpiresAt);
+      if (detail.status === 'open') {
+        if (detail.qrCodeData) {
+          setQrData(detail.qrCodeData);
+          setQrType(detail.qrType ?? 'CHECK_IN');
+          setIsLocked(false);
+          startTimer(detail.qrExpiresAt);
 
-        if (detail.qrType === 'CHECK_OUT') {
-          setCheckoutActive(true);
+          if (detail.qrType === 'CHECK_OUT') {
+            setCheckoutActive(true);
+          }
+        } else {
+          setQrData(null);
+          setIsLocked(true);
+          clearInterval(timerRef.current);
         }
       }
     } catch (err) {
@@ -206,42 +213,35 @@ export default function QR() {
   useEffect(() => {
     if (!sessionId) return undefined;
 
-    Promise.resolve().then(() => {
-      fetchDetail();
+    const initSession = async () => {
+      try {
+        setQrLoading(true);
+        const res = await api.get(`/api/v1/sessions/${sessionId}`);
+        const detail = res.data.result;
 
-      setQrLoading(true);
+        if (detail.status !== 'open' && detail.status !== 'closed' && detail.status !== 'checking_out') {
+          await api.patch(`/api/v1/sessions/${sessionId}/status`, { status: 'OPEN' });
+        }
+      } catch (err) {
+        if (err?.response?.data?.code !== 'SESSION_ALREADY_OPEN') {
+          setOpenError(friendlyError(err));
+        }
+      } finally {
+        await fetchDetail();
+        connectSse();
+        setQrLoading(false);
+      }
+    };
 
-      api
-        .patch(`/api/v1/sessions/${sessionId}/status`, { status: 'OPEN' })
-        .then((res) => {
-          applyQrResponse(res.data.result);
-          fetchDetail();
-          connectSse();
-        })
-        .catch((err) => {
-          const msg = friendlyError(err);
-
-          if (err?.response?.data?.code === 'SESSION_ALREADY_OPEN') {
-            fetchDetail();
-            connectSse();
-          } else {
-            setOpenError(msg);
-          }
-        })
-        .finally(() => {
-          setQrLoading(false);
-
-        });
-    });
+    initSession();
 
     return () => {
       if (sseRef.current) {
         sseRef.current.close();
       }
-
       clearInterval(timerRef.current);
     };
-  }, [sessionId, fetchDetail, applyQrResponse, connectSse]);
+  }, [sessionId, fetchDetail, connectSse]);
 
 
 
@@ -288,17 +288,22 @@ export default function QR() {
     }
   };
 
-  const handleToggleLock = () => {
-    const willLock = !isLocked;
-
-    setIsLocked(willLock);
-
-    if (willLock) {
-      clearInterval(timerRef.current);
-      toast('Đã khóa QR điểm danh.', 'warning');
-    } else {
-      handleRefreshQr();
-      toast('Đã mở lại điểm danh!', 'success');
+  const handleToggleLock = async () => {
+    try {
+      const willLock = !isLocked;
+      if (willLock) {
+        await api.patch(`/api/v1/sessions/${sessionId}/qr/clear`);
+        clearInterval(timerRef.current);
+        setIsLocked(true);
+        setQrData(null);
+        toast('Đã khóa QR điểm danh.', 'warning');
+      } else {
+        await handleRefreshQr();
+        setIsLocked(false);
+        toast('Đã mở lại điểm danh!', 'success');
+      }
+    } catch (err) {
+      toast(friendlyError(err), 'error');
     }
   };
 
